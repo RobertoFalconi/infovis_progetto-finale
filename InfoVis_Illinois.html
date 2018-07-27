@@ -7,159 +7,120 @@
 	<title>ABRCA-DATA</title>
 
 	<link rel="stylesheet" href="css/style.css">
+
+    <script src="js/Illinois_map.js"></script> <!-- Paths della mappa degli Illinois -->
+
+    <script src="js/dataset.js"></script> <!-- Datasets dei distretti -->
+
+    <script src="https://d3js.org/d3.v5.min.js"></script> <!-- D3.js versione 5 -->
 </head>
 
 <body>
 
-	<div id="root"> </div>
+	<div id="header"> </div>
 
 	<div id="tooltip"></div>
 
-	<svg width="600" height="400" style="position: absolute; top: 200px; left: 1000px; z-index: 2;"></svg>
+	<svg width="500" height="400" style="position: absolute; top: 100px; left: 800px; z-index: 2;"></svg>
 
-	<svg width="1100" height="1000" id="statesvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg> <!-- Dimensione della mappa -->
-
-	<script src="js/Illinois_map.js"></script> <!-- Paths della mappa degli Illinois -->
-
-	<script src="js/dataset.js"></script> <!-- Datasets dei distretti -->
-
-	<script src="https://d3js.org/d3.v5.min.js"></script> <!-- D3.js versione 5 -->
+    <!-- Dimensione della mappa -->
+	<svg width="700" height="1000" id="statesvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
 
 	<!-- Inizio scala colore laterale -->
 	<div class="container" style="top: 150px; left: 50px; z-index: 1;">
 
-		<h4>High %<br>of stops</h4>
-		
+		<h4>Numero <br> alto di <br>incidenti</h4>
+
 		<div class="tooltip">
-			<img src="imm/red.png" alt="scala colori utilizzata" id="imgScale" border=2 height="450px" width="50px">
-			<span class="tooltiptext">The percentage of stops in each district is calculated based on the number of inhabitants in the district</span>
+			<img src="imm/green.png" alt="scala colori utilizzata" id="imgScale" border=2 height="450px" width="50px">
+			<span class="tooltiptext">Spiegazione scala ....</span>
 	  	</div>
 
-		  <h4>Low %<br>of stops</h4>
+		  <h4>Numero <br>basso di <br>incidenti</h4>
 
 	</div>
 	<!-- Fine scala colore laterale -->
 
-	<!-- Inizio sezione Scelta colori della mappa -->
-	<div class="container" style="top: 60px; left: 50px; z-index: 0;">
-		<div class="tooltip">
-			<h3>Scale-Chromatic</h3>
-			<span class="tooltiptext">Select one of the four color scales available for viewing</span>
-			<select>
-				<option value="red" checked="checked" onclick="updateScaleChromatic('red')">Red</option>
-				<option value="blue" onclick="updateScaleChromatic('blue')">Blue</option>
-				<option value="green" onclick="updateScaleChromatic('green')">Green</option>
-				<option value="violet" onclick="updateScaleChromatic('violet')">Violet</option>
-			</select> 
-		</div>
-	</div>
-
-	<!-- Fine sezione Scelta colori della mappa -->
-
-	<!-- Inizio sezione Lingua -->
-	<!--
-	<div class="container" style="top: 60px; left: 1300px; z-index: 0;">
-		<div class="tooltip">
-			<h3>Lingua Interfaccia</h3>
-			<select>
-				<option value="ita" checked="checked" onclick="updateLingua('ita')">Italiano</option>
-				<option value="en" onclick="updateLingua('en')">English</option>
-			</select> 
-		</div>
-	</div>
-	-->
-	<!-- Fine sezione Lingua -->
-	
 	<!-- Inizio sezione bottoni -->
-	<div class="container" style="top: 70px; left: 850px; width: 150px;">
-		
+	<div class="container" style="top: 440px; left: 1100px; width: 150px;">
+
 		<h2>Select Race</h2>
-			
+
 		<ul>
-		<li>
-			<input type="radio" id="f-option" name="selector" checked="checked" onclick="updateFiltro('totale'), updateBarChart(barData_default, barDataFermi_default, 'All Distrects')">
-			<label for="f-option">All</label>
-			
-			<div class="check"></div>
-		</li>
-		
-		<li>
-			<input type="radio" id="s-option" name="selector" onclick="updateFiltro('bianchi')">
-			<label for="s-option">White</label>
-			
-			<div class="check"><div class="inside"></div></div>
-		</li>
-		
-		<li>
-			<input type="radio" id="t-option" name="selector" onclick="updateFiltro('neri')">
-			<label for="t-option">Black</label>
-			
-			<div class="check"><div class="inside"></div></div>
-		</li>
+            <li>
+                <input type="radio" id="f-option" name="selector-race" checked="checked" onclick="updateFiltro('totale'), updateBarChart(barData_default, barDataFermi_default, 'All Distrects')">
+                <label for="f-option">All</label>
+                <div class="check"></div>
+            </li>
 
-		<li>
-			<input type="radio" id="u-option" name="selector" onclick="updateFiltro('asiatici')">
-			<label for="u-option">Asian</label>
-			
-			<div class="check"><div class="inside"></div></div>
-		</li>
+            <li>
+                <input type="radio" id="s-option" name="selector-race" onclick="updateFiltro('bianchi')">
+                <label for="s-option">White</label>
+                <div class="check"><div class="inside"></div></div>
+            </li>
 
-		<li>
-				<input type="radio" id="v-option" name="selector" onclick="updateFiltro('ispanici')">
-				<label for="v-option">Hispanic</label>
-					
-				<div class="check"><div class="inside"></div></div>
-		</li>
+            <li>
+                <input type="radio" id="t-option" name="selector-race" onclick="updateFiltro('neri')">
+                <label for="t-option">Black</label>
+                <div class="check"><div class="inside"></div></div>
+            </li>
+
+            <li>
+                <input type="radio" id="u-option" name="selector-race" onclick="updateFiltro('asiatici')">
+                <label for="u-option">Asian</label>
+                <div class="check"><div class="inside"></div></div>
+            </li>
+
+            <li>
+                <input type="radio" id="v-option" name="selector-race" onclick="updateFiltro('ispanici')">
+                <label for="v-option">Hispanic</label>
+                <div class="check"><div class="inside"></div></div>
+            </li>
 		</ul>
 	</div>
 
 	<div class="container" style="top: 440px; left: 850px; width: 150px;">
-		
+
 		<h2>Select Gender</h2>
 			<ul>
 				<li>
-					<input type="radio" id="a-option" name="selector" onclick="updateFiltro('totale')">
+					<input type="radio" id="a-option" name="selector-gender" onclick="updateFiltro('totale')">
 					<label for="a-option">All</label>
-							
 					<div class="check"></div>
 				</li>
 				<li>
-					<input type="radio" id="m-option" name="selector" onclick="updateFiltro('uomini')">
+					<input type="radio" id="m-option" name="selector-gender" onclick="updateFiltro('uomini')">
 					<label for="m-option">Man</label>
-				
 					<div class="check"></div>
-			</li>
-			
-			<li>
-					<input type="radio" id="w-option" name="selector" onclick="updateFiltro('donne')">
-					<label for="w-option">Woman</label>
-				
-					<div class="check"><div class="inside"></div></div>
-			</li>
+                </li>
+                <li>
+                    <input type="radio" id="w-option" name="selector-gender" onclick="updateFiltro('donne')">
+                    <label for="w-option">Woman</label>
+                    <div class="check"><div class="inside"></div></div>
+                </li>
 			</ul>
 		</div>
 		<!-- Fine sezione bottoni -->
 
 		<!-- Inizio sezione Cerchio con colore del distretto -->
-		<div class="tooltip" style="top: 80px; left: 600px;">
+		<div class="tooltip" style="top: 120px; left: 600px;">
 			<svg width="80" height="80">
 				<circle cx="40" cy="40" r="38" fill="none" z-index="5"/>
 			</svg>
-			<span class="tooltiptext">Click to switch to the B/W view</span>
 		</div>
 		<!-- Fine sezione Cerchio con colore del distretto -->
 
 	<script>
 
 		/* Intestazione in alto */
-		const root = d3.select('#root');
-		const instructions = root.append('div').attr('id', 'instructions').append('div');
+		const header = d3.select('#header');
+		const instructions = header.append('div').attr('id', 'instructions').append('div');
 		instructions.append('p').text('Tutti botti in Italia');
 
 		/* Crea il contenuto html in tooltip div */
 		function tooltipHtml(n, d) {
 			var selezione;
-			
+
 			switch(d.Filtro) {
     			case "totale":
 					selezione = "All";
@@ -189,52 +150,7 @@
 				"<tr><td>Stops:</td><td>" + (d.fermi) + "</td></tr>" +
 				"<tr><td>Stops/Population:</td><td>" + ((d.rapporto)*100).roundTo(2) + "%" + "</td></tr>" +
 				"</table>";
-			 /*"<tr><td>Rate:</td><td>" + (d.percentuale_norm).roundTo(2) + "%" + "</td></tr>" +*/
 		}
-
-		/* NON UTILIZZATO */
-		/* Effettuo la chiamata asincrona richiedendo un file CSV */
-		d3.csv("dataset/popolazione/popolazione_totale.csv", function(err,data) { // Funzione di callback con errore e dati
-			DIST1 = data[0]; // Stampo l'oggetto data nella console
-			//console.log(DIST1);
-		});
-
-		/* Restituisce la somma di tutti i rapporti numero_di_fermi/numero_di_abitanti di tutti i distretti a seconda del filtro utilizzato (razza o genere) */
-		function somma_rapporti_fun(distretti, filtro){
-			var i;
-			var somma = 0;
-			if (filtro == "totale") {
-				for (i in distretti)
-				somma = somma + (distretti_fermi[i].totale/distretti[i].totale);
-			}
-			else if (filtro == "bianchi") {
-				for (i in distretti)
-				somma = somma + (distretti_fermi[i].bianchi/distretti[i].bianchi);
-			}
-			else if (filtro == "neri") {
-				for (i in distretti)
-				somma = somma + (distretti_fermi[i].neri/distretti[i].neri);
-			}
-			else if (filtro == "asiatici") {
-				for (i in distretti)
-				somma = somma + (distretti_fermi[i].asiatici/distretti[i].asiatici);
-			}
-			else if (filtro == "ispanici") {
-				for (i in distretti)
-				somma = somma + (distretti_fermi[i].ispanici/distretti[i].ispanici);
-			}
-			else if (filtro == "uomini") {
-				for (i in distretti)
-				somma = somma + (distretti_fermi[i].uomini/distretti[i].uomini);
-			}
-			else if (filtro == "donne") {
-				for (i in distretti)
-				somma = somma + (distretti_fermi[i].donne/distretti[i].donne);
-			}
-			
-			return somma;
-		}
-
 
 		/* Dato un filtro (razza o genere) ed un numero di distretto, restituisce il numero di abitanti e di fermi relativi al filtro del distretto stesso */
 		function abitantiEfermiFiltrati(filtro, i) {
@@ -304,7 +220,6 @@
 				for (i in distretti)
 					rapporti.push((distretti_fermi[i].donne/distretti[i].donne));
 			}
-			
 			return rapporti;
 		}
 
@@ -317,29 +232,18 @@
 			var abitanti;
 			var fermi;
 			var codiceColore;
-			//somma_rapporti = somma_rapporti_fun(distretti, Filtro);
 			rapporti_dist = rapportiDistretti(distretti, Filtro);
-			//console.log(rapporti_dist);
 			rapportoMax = Math.max.apply(null, rapporti_dist);
-			//console.log("Max: " + rapportoMax);
-			//window.alert(filtro);
 			for (i in distretti) {
 				abitantiEfermi = abitantiEfermiFiltrati(Filtro, i);
 				abitanti = abitantiEfermi.abitanti;
 				fermi = abitantiEfermi.fermi;
 				rapporto = fermi/abitanti;
-				//percentuale_norm = (rapporto * 100)/somma_rapporti;
 				percentuale_norm = rapporto/rapportoMax;
-				//console.log(percentuale_norm);
-				//window.alert("filtro: " + filtro + "; abitanti: " + abitanti + "; fermi: " + fermi);
-				codiceColore = d3.interpolateYlOrRd(percentuale_norm);
-
-				sampleData[distretti[i].id]={abitanti, fermi, rapporto, percentuale_norm, Filtro, color:codiceColore}; 
+				codiceColore = d3.interpolateYlGn(percentuale_norm);
+				sampleData[distretti[i].id]={abitanti, fermi, rapporto, percentuale_norm, Filtro, color:codiceColore};
 			}
-			
 			/* Disegna distretti con id #statesvg */
-			//window.alert("DIST15: " + sampleData["DIST15"].abitanti + "; " + sampleData["DIST15"].color);
-			
 			uStates.draw("#statesvg", sampleData);
 			uStates.updateToolTip("#statesvg", sampleData, tooltipHtml)
 		}
@@ -352,7 +256,6 @@
 			var abitanti;
 			var fermi;
 			var codiceColore;
-			//somma_rapporti = somma_rapporti_fun(distretti, Filtro);
 			rapporti_dist = rapportiDistretti(distretti, Filtro);
 			rapportoMax = Math.max.apply(null, rapporti_dist);
 			for (i in distretti) {
@@ -361,45 +264,14 @@
 				fermi = abitantiEfermi.fermi;
 				rapporto = fermi/abitanti;
 				percentuale_norm = rapporto/rapportoMax
-				
-				/* Seleziono la giusta scala cromatica */
-				switch(ScaleChromatic) {
-    			case "red":
-					codiceColore = d3.interpolateYlOrRd(percentuale_norm);
-        			break;
-    			case "blue":
-					codiceColore = d3.interpolateYlGnBu(percentuale_norm);
-        			break;
-				case "green":
-					codiceColore = d3.interpolateYlGn(percentuale_norm);
-					break;
-				case "violet":
-					codiceColore = d3.interpolateRdPu(percentuale_norm);
-					break;
-					
-				}
-
-				sampleData[distretti[i].id]={abitanti, fermi, rapporto, percentuale_norm, Filtro, color:codiceColore}; 
+                codiceColore = d3.interpolateYlGn(percentuale_norm);
+				sampleData[distretti[i].id]={abitanti, fermi, rapporto, percentuale_norm, Filtro, color:codiceColore};
 			}
-			
-			/* Disegna distretti con id #statesvg */
-			//console.log(sampleData);
-			//window.alert("PRIMA METODO DISEGNO - DIST15: " + sampleData["DIST15"].abitanti + "; " + sampleData["DIST15"].color);
 			uStates.update("#statesvg", sampleData);
 			uStates.updateToolTip("#statesvg", sampleData, tooltipHtml)
-
 		}
 
-		/* Scala cromatica di default impostata a red */
-		var ScaleChromatic = "red";
 		var Filtro = "totale";
-
-		/* Aggiorna la scala di colori della mappa */
-		function updateScaleChromatic(scala) {
-			ScaleChromatic = scala;
-			updateMap();
-			document.getElementById("imgScale").src="imm/"+scala+".png";
-		}
 
 		/* Aggiorna la scala di colori della mappa */
 		function updateFiltro(filtro) {
@@ -409,7 +281,7 @@
 
 		/* Disegna la prima volta la mappa con impostazione di default "tutta la popolazione" */
 		viewMap();
-		
+
 		d3.select(self.frameElement).style("height", "600px");
 
 		/* Arrotonda i numeri a x cifre decimali */
@@ -493,8 +365,6 @@
 						{Race: "Woman", Population: (totaliFermiDistretti.donne/totaliFermiDistretti.totale)*100, Color: "red"}
 					];
 
-		//console.log(getMax(distretti));
-
 		/* Ritorna il valore più alto di un array di oggetti */
 		function getMax(barData) {
 			var max = 0;
@@ -520,20 +390,16 @@
 			}
 			return totali;
 		}
-		//console.log(getTotaliFermi(distretti_fermi));
-
-		//console.log(barData_default);
-		//console.log(barDataFermi_default);
 
 		var svg = d3.select("svg"),
 		margin = {
-			top: 40,
-			right: 40,
+			top: 50,
+			right: 50,
 			bottom: 30,
 			left: 80
 		},
-		width = +svg.attr("width") - margin.left - margin.right,
-		height = +svg.attr("height") - margin.top - margin.bottom,
+		width = +svg.attr("width") - margin.left - margin.right - 40,
+		height = +svg.attr("height") - margin.top - margin.bottom - 50,
 		g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 		var x = d3.scaleBand()
@@ -542,17 +408,14 @@
 
 		var y = d3.scaleLinear()
 			.rangeRound([height, 0]);
-		
+
 		/* Disegna la prima volta il Bar Chart con i dati della popolazione dell'intero Illinois */
 		function showBar(data, data2, distName) {
 			{
-				//console.log(data[0].Population + "; "+ data[0].Population);
-
 				x.domain(data.map(function (d) {
-						//console.log(d.Race);
-						return d.Race;
+						    return d.Race;
 						}));
-				
+
 				var a;
 
 				/* Per l'asse y prendo il valore massimo tra i dati degli abitanti e quelli dei fermi */
@@ -562,7 +425,6 @@
 					a = data2;}
 
 				y.domain([0, d3.max(a, function (d) {
-						//console.log(d.Population);
 						return Number(d.Population);
 						})]);
 
@@ -614,7 +476,7 @@
 				.attr("height", function (d) {
 					return height - y(Number(d.Population));
 				});
-				
+
 				/* Barre del grafico (percentuale popolazione)*/
 				g.selectAll(".bar")
 				.data(data)
@@ -635,23 +497,19 @@
 					return height - y(Number(d.Population));
 				});
 
-				
+
 			}
 		}
 
 		/* Visualizzazione di default del Bar Chart (popolazione intero Illinois) */
 		showBar(barData_default, barDataFermi_default, "All Distrects");
-		//console.log(barData_default);
-		//console.log(barDataFermi_default);
 
 		/* Aggiornamento dati Bar Chart */
 		function updateBarChart(data, data2, distName) {
-
-			//console.log(data);
 			x.domain(data.map(function (d) {
 				return d.Race;
 			}));
-				
+
 			var a;
 
 			/* Per l'asse y prendo il valore massimo tra i dati degli abitanti e quelli dei fermi */
@@ -663,7 +521,7 @@
 			y.domain([0, d3.max(a, function (d) {
 				return Number(d.Population);
 			})]);
-			
+
 			/* Aggiornamento barre del grafico 2 (percentuale fermi) */
 			svg.selectAll(".bar2")
 				.remove()
@@ -680,13 +538,13 @@
 					return (x(d.Race) + 80);
 				})
 				.attr("y", function (d) {
-					return (y(Number(d.Population)) + 40);
+					return (y(Number(d.Population)) + 50);
 				})
 				.attr("width", x.bandwidth())
 				.attr("height", function (d) {
 					return height - y(Number(d.Population));
-				});	
-			
+				});
+
 			/* Aggiornamento barre del grafico (percentuale popolazione)*/
 			svg.selectAll(".bar")
 				.remove()
@@ -702,7 +560,7 @@
 					return (x(d.Race) + 80);
 				})
 				.attr("y", function (d) {
-					return (y(Number(d.Population)) + 40);
+					return (y(Number(d.Population)) + 50);
 				})
 				.attr("width", x.bandwidth())
 				.attr("height", function (d) {
@@ -716,31 +574,11 @@
 			/* Aggiornamento Asse Y del grafico */
 			svg.select(".asseY")
 				.call(d3.axisLeft(y));
-			
-			/*
-			svg.selectAll(".rect")
-				.remove()
-				.exit()
-				.data(data)
-				.enter().append("rect")
-				.attr("x", function (d) {
-					return x(d.Race);
-				})
-				.attr("y", function (d) {
-					return y(Number(d.Population));
-				})
-				.attr("width", x.bandwidth())
-				.attr("height", function (d) {
-					return height - y(Number(d.Population));
-				});
-			*/
+
 			svg.selectAll(".title")
 				.attr("x", (width/2)-80)
 				.text("- " + distName + " -");
 		}
-		
-
 	</script>
 <!-- Fine sezione Bar Chart -->
-
 </body>
