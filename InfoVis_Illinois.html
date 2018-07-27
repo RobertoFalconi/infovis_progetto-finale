@@ -24,7 +24,7 @@
 	<svg width="500" height="400" style="position: absolute; top: 100px; left: 800px; z-index: 2;"></svg>
 
     <!-- Dimensione della mappa -->
-	<svg width="700" height="1000" id="statesvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
+	<svg width="700" height="750" id="statesvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
 
 	<!-- Inizio scala colore laterale -->
 	<div class="container" style="top: 150px; left: 50px; z-index: 1;">
@@ -41,7 +41,15 @@
 	</div>
 	<!-- Fine scala colore laterale -->
 
-	<!-- Inizio sezione bottoni -->
+    <div id="slider" style="position:absolute;top:900px;left:200px;width: 600px">
+        <div align="center">
+            <input type="range" min="2003" max="2013" value="2008" class="slider" id="range">
+            <p>Anno: <span id="valoreAnno"></span></p>
+        </div>
+    </div>
+
+
+        <!-- Inizio sezione bottoni -->
 	<div class="container" style="top: 440px; left: 1100px; width: 150px;">
 
 		<h2>Select Race</h2>
@@ -116,6 +124,15 @@
 		const header = d3.select('#header');
 		const instructions = header.append('div').attr('id', 'instructions').append('div');
 		instructions.append('p').text('Tutti botti in Italia');
+
+		/* Slider */
+        var slider2 = document.getElementById("range");
+        var output2 = document.getElementById("valoreAnno");
+        output2.innerHTML = slider2.value;
+        slider2.oninput = function() {
+            output2.innerHTML = this.value;
+            // aggiorna mappa con selezione per anno
+        };
 
 		/* Crea il contenuto html in tooltip div */
 		function tooltipHtml(n, d) {
