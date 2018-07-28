@@ -1,7 +1,7 @@
 (function() {
 
-	/* Paths dei distretti dello stato dell'Illinois, ottenuti da un sito che fornisce mappe in formato svg */
-    var uStatePaths=[
+    /* Paths dei distretti dello stato dell'Illinois, ottenuti da un sito che fornisce mappe in formato svg */
+    var pathRegioni=[
         {id:"Abr",n:"Abruzzo",d:"M373.96,303.76L375.32,310.1L377.56,315.61L383.83,326.79L390.84,334.5L399.08,340.65L399.95,342.98L403.62,346.51L403.95,347.86L409.51,351.56L414.67,353.39L414.88,358.24L418.31,360.67L418.31,360.67L417.14,362.52L418.05,363.36L415.21,365.32L412.91,368.16L412.09,371.26L409.73,372.92L408.01,376.65L403.25,381.78L401.21,381.41L402,380.77L400.93,376.48L399.83,375.41L397.39,373.79L396.34,375.11L395.77,374.89L394.79,372.7L393.55,372.83L392.61,371.57L389.7,373.95L388.27,376.17L386.05,376.32L385.63,377.22L386.88,380.77L388.4,381.66L387.98,382.69L387.13,382.56L386.88,381.55L386.21,382.79L384.22,382.84L383.59,385.48L382.8,383.41L381.64,383.5L380.77,385.9L379.44,385.95L379.16,387.41L377.29,386.43L375.19,386.95L375.19,386.95L372.7,383.68L370.74,383.87L368.34,382.46L367.31,383.11L365.98,382.71L364.23,379.4L362.91,380.13L361.84,378.95L360.06,378.46L359,380.55L354.95,381.9L353.47,380.97L352.74,379.16L350.9,378.73L349.42,377.3L347.69,376.6L346.29,377.96L345.29,374.33L346.57,372.04L345.57,370.63L344.56,370.81L342.58,368.53L341.68,368.9L334.03,364.41L332,363.69L331.98,364.93L329.6,364.29L328.19,362.04L328.34,357.12L329.12,357.48L331.2,355.7L331.25,353.31L332.98,353.18L339.54,356.71L340.78,355.94L342.47,356.56L343.54,354.33L345.04,354.04L344.51,353.33L346.34,353L344.41,351.78L344.11,350.15L341.68,349.31L339.1,346.77L338.45,343.49L334.71,341.01L336.79,338.68L332.8,334.94L335.98,332.52L335.88,330.14L334.88,328.28L335.91,327.7L336.67,324.94L339.42,325.98L340.03,325.25L341.38,325.25L341.96,326.23L343.46,325.46L345.72,325.77L347.07,324.6L347.83,321.17L345.84,320.54L344.69,319.17L345.23,317.49L345.23,317.49L345.23,317.49L345.23,317.49L345.23,317.49L345.23,317.49L346.89,317.97L348.77,316.64L349.34,317.1L349.94,314.73L352.31,314.34L352.61,311.85L353.95,310.36L354.19,308.92L356.27,310.05L358.64,308.94L359.31,309.88L360.66,309.71L362.67,308.77L363.13,306.56L363.81,306.18L366.59,306L368.7,304.59L373.69,303.52L373.69,303.52z"},
         {id:"Bas",n:"Basilicata",d:"M457.12,429.87L456.79,428.64L458.13,427.41L460.08,427.03L464.73,427.81L467.24,426.91L468.69,427.96L470.38,427.05L470.22,426.1L471.89,425.67L471.71,424.91L472.53,425.2L473.95,424.35L476.25,426L477.99,426.3L478.23,427.33L479.49,427.63L480.1,429.98L480.72,429.56L482.56,431.06L481.92,432.1L482.22,433.65L480.43,435.7L478.92,435.43L479.53,436.56L485.12,438.94L486.71,440.45L488.85,438.49L490.85,439.14L493.79,445.6L500.35,451.65L501.13,453.39L502.66,453.81L506.14,449.77L508.18,452.24L508.12,450.35L509.09,450.09L509.94,451.42L510.05,449.68L511.74,450.41L512.75,449.77L512.92,450.76L514.09,451.46L514.63,450.72L517.55,452.94L516.52,453.45L517.74,454.86L516.84,458.48L517.76,460.53L517.13,460.99L516.7,463.88L517.66,464.89L517.22,465.7L518.38,466.58L517.42,468.66L518.28,469.6L519.98,469.17L521.75,470.24L522.12,471.86L523.86,473.33L524.64,475.19L524.64,475.19L520.7,480.83L515.89,491.19L513.6,492.86L513.6,492.86L510.88,491.91L507.76,492.88L504.68,491.86L502.77,492.23L502.11,491.12L501.48,492.59L501.7,495.43L500.67,497.65L500.93,499.65L497.88,505.09L498.99,506.23L498.55,507.55L496.41,505.16L494.41,504.98L491.48,505.64L491.46,507.39L488.68,506.12L487.64,507.2L482.84,507.46L481.29,505.72L481.66,505.1L480.81,503.5L482.05,501.27L480.89,500.95L479.4,501.8L478.71,500.84L476.86,500.54L475.43,501.77L474.81,500.9L473.88,501.39L472.98,500.45L471.3,500.63L468.95,503.16L468,505.76L468,505.76L466.21,502.21L464.11,500.29L463.97,498.81L462.29,497.83L462.29,497.83L463.98,496.82L462.71,495.44L463.92,495.1L465.48,492.98L465.16,490.07L466.78,488.42L466.64,487.42L470.11,485.94L469.59,484.71L470.52,483.88L470.48,482.46L469.87,481.31L466.94,480.46L466.8,479.14L465.16,477.63L465.11,475.07L463.01,474.31L461.41,472.17L459.35,471.14L458.87,469.41L456.7,467.7L457.42,466.62L456.07,463.41L456.77,462.59L452.42,459.96L453.15,457.94L454.8,456.93L454.86,456.12L448.93,452.27L449.1,447.42L448.28,447.35L448.5,446.17L446.44,444.9L448.54,444.75L448.66,442.61L447.64,442.09L448.07,441.43L452.86,442.51L453.5,442.16L453.27,441L456.23,439.71L458.49,433.84z"},
         {id:"Umb",n:"Umbria",d:"M297.51,254.71l-0.52,-0.58l0,0l-0.19,-0.06l0,0l0.24,-0.68l0.66,0.31l0,0l0.1,0.53l0,0L297.51,254.71zM286.48,253.23l0.71,1.17l3.09,-0.04l0.35,0.56l2.08,-1.68l1.88,-0.12l-0.51,0.78l0.48,1.44l-2.92,2.7l1.36,1.42l1.43,-0.73l1.27,1.73l1.42,-2.09l0.99,0.13l0.83,1.42l0.92,0.05l0.29,-0.86l0.91,0.42l6.36,7.29l2.13,-1.29l2.23,0.82l1.32,-2.69l2.08,0.56l-0.37,2.01l0.9,0.84l-1.8,1.69l0.05,0.84l2.27,2.96l0.38,2.91l-0.62,0.7l1.88,1.34l0.67,3.42l1.39,0.69l-0.14,2.9l-1.62,1.55l0.67,1.54l2.07,0.42l0.57,1.71l-0.24,2.77l0.75,2.11l-0.87,0.66l0.94,1.95l-0.56,1.49l2.69,1.61l0.2,0.87l1.11,0.13l0.12,4.04l1.21,-1.36l0.02,-1.71l1.3,0.77l1.4,-1.39l3.01,2.3l2.5,3.94l2.67,-0.61l1.25,-1.82l1.41,3.62l-0.25,1.82l-0.92,1.9l-0.38,-0.77l-1.92,0.78l-0.25,2l0,0l-0.75,4.46l-1.33,1.28l-1.62,-0.64l-0.05,0.78l-2.8,1.72l-2.06,-1.08l-0.71,1.53l-3.25,-0.04l-0.79,0.97l-2.01,-0.99l-0.58,1.17l0.62,2.55l-2.09,0.67l-1.85,1.63l-2.05,-0.1l-0.17,1.33l-3.06,0.88l1.37,2.04l-2.99,1.97l-1.2,0.05l-0.89,-1.85l-1.19,0.08l-0.22,3.88l-4.33,3.36l-0.87,-1l0.05,-1.68l-3.64,0.53l0.97,-1.42l-2.29,-0.79l0.02,-2.06l0.68,-0.23l-0.74,-0.68l0.25,-1.86l-1.47,-0.16l-2,1.62l-1.23,-1.26l-1.87,0.22l0.69,-0.46l-1.52,-0.8l0.75,-0.67l-1.04,-0.85l0.21,-1.95l-1.67,-0.78l-0.55,-4.47l-1.67,-2.06l-1.62,-0.68l-1.38,1.19l-0.67,-0.21l-0.12,0.75l-1.01,-1.07l-3.68,1.31l-4.14,-2.56l-1.29,-2.11l1.85,-1.04l1.01,-1.98l-2.78,-1.79l-1.62,-3.88l0,0l1.95,-2.34l1.28,-0.08l-0.15,-1.81l-1.09,-0.75l2.42,-9.85l-1.27,-1.36l-0.84,1.05l-0.78,-1.57l0.33,-1.22l-0.88,-2.43l0.49,-1.32l5.18,-3.05l1,-2.73l-0.5,-1.32l0.83,-0.36l2.2,1.23l6.67,-4.18l-1.54,-1.26l-0.9,2.23l-2.23,-0.84l-0.39,-0.9l0.59,-1.71l-1.01,-2.29l-0.65,-0.6l-1.42,0.54l-0.11,-2.66l-2.14,0.22l-0.33,-1l1.71,-1.74l1.09,0.34l1.01,-1.7l2.13,-0.9l0.1,-0.56l-2.61,-1.48l0.17,-1.76l0.55,-0.56l2.19,0.18l0.77,-2.59L286.48,253.23z"},
@@ -25,149 +25,136 @@
 
     ];
 
-
     var uStates={};
-	
-	/* Disegna la mappa per la prima volta */
-	uStates.draw = function(id, data){
 
-		//window.alert("DENTRO METODO DISEGNO - DIST15: " + data["DIST15"].abitanti + "; " + data["DIST15"].color);
-		
-		/* Colora i singoli distretti */
-		d3.select(id).selectAll(".state")
-			.data(uStatePaths)
-			.enter()
-			.append("path")
-			.attr("class","state")
-			.attr("d",function(d){ return d.d;})
-			.style("fill",function(d){ return data[d.id].color; })
-	}
+    /* Disegna la mappa per la prima volta */
+    uStates.draw = function(id, data){
+        /* Colora i singoli distretti */
+        d3.select(id).selectAll(".state")
+            .data(pathRegioni)
+            .enter()
+            .append("path")
+            .attr("class","state")
+            .attr("d",function(d){ return d.d;})
+            .style("fill",function(d){ return data[d.id].color; })
+    };
 
-	/* Aggiorna i colori della mappa secondo il dataset selezionato */
-	uStates.update = function(id, data) {
+    /* Aggiorna i colori della mappa secondo il dataset selezionato */
+    uStates.update = function(id, data) {
+        d3.select(id).selectAll(".state")
+            .transition()
+            .duration(1000)
+            .style("fill",function(d){ return data[d.id].color; })
+    };
 
-		d3.select(id).selectAll(".state")
-  	 		.transition()
-  	  		.duration(1000)
-			/*.style("fill", "red")*/
-			/*.style("fill",function() {
-				return "hsl(" + Math.random() * 360 + ",100%,50%)";
-				})*/
-			.style("fill",function(d){ return data[d.id].color; })
-		
-	}
+    /* Colora la mappa random*/
+    uStates.random = function(id) {
 
-	/* Colora la mappa random*/
-	uStates.random = function(id) {
+        d3.select(id).selectAll(".state")
+            .transition()
+            .duration(1000)
+            .style("fill",function() {return "hsl(" + Math.random() * 360 + ",100%,50%)";})
+    };
 
-		d3.select(id).selectAll(".state")
-  	 		.transition()
-  	  		.duration(1000)
-			.style("fill",function() {return "hsl(" + Math.random() * 360 + ",100%,50%)";})
-	}
+    /* Desatura la mappa */
+    uStates.desatura = function(id, data) {
+        d3.select(id).selectAll(".state")
+            .transition()
+            .duration(1000)
+            .style("fill",function(d){ return d3.interpolateGreys((data[d.id].percentuale_norm)); })
+    };
 
-	/* Desatura la mappa */
-	uStates.desatura = function(id, data) {
-		d3.select(id).selectAll(".state")
-		   .transition()
-			.duration(1000)
-			.style("fill",function(d){ return d3.interpolateGreys((data[d.id].percentuale_norm)); })
-	}
+    /* Aggiorna la Tooltip con i dati passati da parametro */
+    uStates.updateToolTip = function(id, data, toolTip) {
 
-	/* Aggiorna la Tooltip con i dati passati da parametro */
-	uStates.updateToolTip = function(id, data, toolTip) {
+        /* Gestisce la Tooltip in entrata */
+        function mouseOver(d){
+            // Effetto entrata delle informazioni sul District (tooltip)
+            d3.select("#tooltip")
+                .transition()
+                .duration(400)
+                .style("opacity", 0.9);
+            //console.log(data);
+            d3.select("#tooltip").html(toolTip(d.n, data[d.id]))
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        }
 
-		/* Gestisce la Tooltip in entrata */
-		function mouseOver(d){
+        /* Gestisce la Tooltip in uscita */
+        function mouseOut(){
+            d3.select("#tooltip")
+                .transition()
+                .duration(400)
+                .style("opacity", 0);
+        }
 
-			//window.alert("DENTRO MOUSE OVER - " + d.n + ": " + data[d.id].abitanti + " - " + data[d.id].color);
+        /* Gestisce mouseover, mouseout e mouseclick dei distretti*/
+        d3.select(id).selectAll(".state")
+            .on("mouseover", mouseOver)
+            .on("mouseout", mouseOut)
+            .on("click", mouseClick);
 
-			// Effetto entrata delle informazioni sul District (tooltip)
-			d3.select("#tooltip")
-				.transition()
-				.duration(400)
-				.style("opacity", 0.9);
-			//console.log(data);
-			d3.select("#tooltip").html(toolTip(d.n, data[d.id]))
-				.style("left", (d3.event.pageX) + "px")
-				.style("top", (d3.event.pageY - 28) + "px");
-		}
-		
-		/* Gestisce la Tooltip in uscita */
-		function mouseOut(){
-			d3.select("#tooltip")
-				.transition()
-				.duration(400)
-				.style("opacity", 0);
-		}
+        function mouseClick(d){
+            var dist = d.id;
+            var index = 1;
 
-		/* Gestisce mouseover, mouseout e mouseclick dei distretti*/
-		d3.select(id).selectAll(".state")
-			.on("mouseover", mouseOver)
-			.on("mouseout", mouseOut)
-			.on("click", mouseClick);
-		
-		function mouseClick(d){
-			var dist = d.id;
-			var index = getIndexByDist(dist);
+            barData = [{Race: "White", Population: (distretti[index].bianchi/distretti[index].totRace)*100, Color: "#ffcccc"},
+                {Race: "Black", Population: (distretti[index].neri/distretti[index].totRace)*100, Color: "#663300"},
+                {Race: "Asiatic", Population: (distretti[index].asiatici/distretti[index].totRace)*100, Color: "#ffff99"},
+                {Race: "Ispanic", Population: (distretti[index].ispanici/distretti[index].totRace)*100, Color: "#ffb366"},
+                {Race: "Man", Population: (distretti[index].uomini/distretti[index].totale)*100, Color: "#0066ff"},
+                {Race: "Woman", Population: (distretti[index].donne/distretti[index].totale)*100, Color: "#ff3399"}
+            ];
 
-			barData = [{Race: "White", Population: (distretti[index].bianchi/distretti[index].totRace)*100, Color: "#ffcccc"},
-						{Race: "Black", Population: (distretti[index].neri/distretti[index].totRace)*100, Color: "#663300"},
-						{Race: "Asiatic", Population: (distretti[index].asiatici/distretti[index].totRace)*100, Color: "#ffff99"},
-						{Race: "Ispanic", Population: (distretti[index].ispanici/distretti[index].totRace)*100, Color: "#ffb366"},
-						{Race: "Man", Population: (distretti[index].uomini/distretti[index].totale)*100, Color: "#0066ff"},
-						{Race: "Woman", Population: (distretti[index].donne/distretti[index].totale)*100, Color: "#ff3399"}
-					];
-			
-			barData2 = [{Race: "White", Population: (distretti_fermi[index].bianchi/distretti_fermi[index].totale)*100, Color: "#ffcccc"},
-					{Race: "Black", Population: (distretti_fermi[index].neri/distretti_fermi[index].totale)*100, Color: "#663300"},
-					{Race: "Asiatic", Population: (distretti_fermi[index].asiatici/distretti_fermi[index].totale)*100, Color: "#ffff99"},
-					{Race: "Ispanic", Population: (distretti_fermi[index].ispanici/distretti_fermi[index].totale)*100, Color: "#ffb366"},
-					{Race: "Man", Population: (distretti_fermi[index].uomini/distretti_fermi[index].totale)*100, Color: "#0066ff"},
-					{Race: "Woman", Population: (distretti_fermi[index].donne/distretti_fermi[index].totale)*100, Color: "#ff3399"}
-				];
+            barData2 = [{Race: "White", Population: (distretti_fermi[index].bianchi/distretti_fermi[index].totale)*100, Color: "#ffcccc"},
+                {Race: "Black", Population: (distretti_fermi[index].neri/distretti_fermi[index].totale)*100, Color: "#663300"},
+                {Race: "Asiatic", Population: (distretti_fermi[index].asiatici/distretti_fermi[index].totale)*100, Color: "#ffff99"},
+                {Race: "Ispanic", Population: (distretti_fermi[index].ispanici/distretti_fermi[index].totale)*100, Color: "#ffb366"},
+                {Race: "Man", Population: (distretti_fermi[index].uomini/distretti_fermi[index].totale)*100, Color: "#0066ff"},
+                {Race: "Woman", Population: (distretti_fermi[index].donne/distretti_fermi[index].totale)*100, Color: "#ff3399"}
+            ];
 
-			/* Colora di bianco il distretto selezionato */
-			uStates.update("#statesvg", data);
-			d3.select(this)
-			.transition()
-			.duration(400)
-			.style("fill", "white");
+            /* Colora di bianco il distretto selezionato */
+            uStates.update("#statesvg", data);
+            d3.select(this)
+                .transition()
+                .duration(400)
+                .style("fill", "white");
 
-			/* Aggiorna cerchietto vicino mappa */
-			d3.select("circle")
-			.transition()
-			.duration(400)
-			.style("opacity", 1)
-			.style("stroke", "black")
-			.style("stroke-width", 1.5)
-			.style("stroke-opacity", 0.8)
-			.style("fill", data[d.id].color),
-			
-			updateBarChart(barData, barData2, d.n) /* Mostro il grafico a barre laterale */
-			
-		}
+            /* Aggiorna cerchietto vicino mappa */
+            d3.select("circle")
+                .transition()
+                .duration(400)
+                .style("opacity", 1)
+                .style("stroke", "black")
+                .style("stroke-width", 1.5)
+                .style("stroke-opacity", 0.8)
+                .style("fill", data[d.id].color),
 
-		/* Gestisce mouseclick del cerchio colorato*/
-		d3.select("circle")
-			.on("click", function(){d3.select("circle")
-				.transition()
-				.duration(200)
-				.style("opacity",0.4)
-				.style("fill","black")
-				.style("stroke.opacity",1)
-				.transition()
-				.duration(400)
-				.style("opacity",0.1)
-				.style("fill","black")
-				.style("stroke.opacity",0),uStates.desatura("#statesvg", data)})
-	}
+                updateBarChart(barData, barData2, d.n) /* Mostro il grafico a barre laterale */
 
-	function getIndexByDist(dist) {
-		return (Number(dist.substring(4))-1);
-	}
+        }
 
-	this.uStates=uStates;
-	
+        /* Gestisce mouseclick del cerchio colorato*/
+        d3.select("circle")
+            .on("click", function(){d3.select("circle")
+                .transition()
+                .duration(200)
+                .style("opacity",0.4)
+                .style("fill","black")
+                .style("stroke.opacity",1)
+                .transition()
+                .duration(400)
+                .style("opacity",0.1)
+                .style("fill","black")
+                .style("stroke.opacity",0),uStates.desatura("#statesvg", data)})
+    };
+
+    function getIndexByDist(dist) {
+        return (Number(dist.substring(4))-1);
+    }
+
+    this.uStates=uStates;
+
 })();
 

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<!--suppress JSAnnotator -->
+<html >
+
+<head>
+    <meta charset="UTF-8">
+    <title>ABRCA-DATA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/mappaItalia.js"></script> <!-- Paths della mappa dell'Italia -->
+    <script src="js/dataset.js"></script> <!-- Datasets dei distretti -->
+    <script src="js/datasetRegioni.js"></script> <!-- Datasets delle regioni -->
+    <script src="js/filtri.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script> <!-- D3.js versione 5 -->
+</head>
+
+<body>
+<div id="header"> </div>
+<div id="tooltip" style="z-index: 1000;"></div>
+<!-- Grafico: bar plot -->
+<svg width="500" height="400" style="position: absolute; top: 100px; left: 800px; z-index: 2;"></svg>
+<!-- Fine Grafico -->
+<!-- Mappa -->
+<svg width="700" height="750" id="statesvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
+<!-- Fine Mappa -->
+<!-- Inizio scala colore laterale -->
+<div class="container" style="top: 150px; left: 50px; z-index: 1;">
+    <h4>Numero <br> alto di <br>incidenti</h4>
+    <div class="tooltip">
+        <img src="imm/green.png" alt="scala colori utilizzata" id="imgScale" border=2 height="450px" width="50px">
+        <span class="tooltiptext">Scala colori con sfumature per numero di incidenti in base ai filtri.</span>
+    </div>
+    <h4>Numero <br>basso di <br>incidenti</h4>
+</div>
+<!-- Fine scala colore laterale -->
+<!-- Slider temporale -->
+<div id="slider" style="position:absolute;top:900px;left:200px;width: 600px">
+    <div align="center">
+        <input type="range" min="2003" max="2013" value="2013" class="slider" id="range">
+        <p>Anno: <span id="valoreAnno"></span></p>
+    </div>
+</div>
+<!-- Fine Slider temporale -->
+<!-- Inizio sezione bottoni/filtri -->
+<div class="container" style="top: 440px; left: 1070px; width: 170px;">
+    <h2>Seleziona gravità</h2>
+    <ul>
+        <li>
+            <input type="radio" id="at-option" name="selector-severity" checked="checked" onclick="updateFiltroGravita('all'), updateBarChart(barData_default, barDataFermi_default, 'All Distrects')">
+            <label for="at-option">Tutti</label>
+            <div class="check"></div>
+        </li>
+        <li>
+            <input type="radio" id="f-option" name="selector-severity" onclick="updateFiltroGravita('injured')">
+            <label for="f-option">Almeno un ferito</label>
+            <div class="check"><div class="inside"></div></div>
+        </li>
+        <li>
+            <input type="radio" id="m-option" name="selector-severity" onclick="updateFiltroGravita('dead')">
+            <label for="m-option">Almeno un morto</label>
+            <div class="check"><div class="inside"></div></div>
+        </li>
+    </ul>
+</div>
+<div class="container" style="top: 440px; left: 850px; width: 150px;">
+    <h2>Seleziona tipologia</h2>
+    <ul>
+        <li>
+            <input type="radio" id="a-option" name="selector-type"  checked="checked" onclick="updateFiltroTipologia('all')">
+            <label for="a-option">Tutti</label>
+            <div class="check"></div>
+        </li>
+        <li>
+            <input type="radio" id="v-option" name="selector-type" onclick="updateFiltroTipologia('cars')">
+            <label for="v-option">Veicoli</label>
+            <div class="check"></div>
+        </li>
+        <li>
+            <input type="radio" id="p-option" name="selector-type" onclick="updateFiltroTipologia('pedestrians')">
+            <label for="p-option">Pedoni</label>
+            <div class="check"><div class="inside"></div></div>
+        </li>
+    </ul>
+</div>
+<div class="container" style="top: 730px; left: 850px; width: 150px;">
+    <h2>Seleziona tipo di strada</h2>
+    <ul>
+        <li>
+            <input type="radio" id="t-option" name="selector-street" checked="checked" onclick="updateFiltroStrada('all')">
+            <label for="t-option">Tutte</label>
+            <div class="check"></div>
+        </li>
+        <li>
+            <input type="radio" id="u-option" name="selector-street" onclick="updateFiltroStrada('urban')">
+            <label for="u-option">Urbane</label>
+            <div class="check"></div>
+        </li>
+        <li>
+            <input type="radio" id="e-option" name="selector-street" onclick="updateFiltroStrada('interurban')">
+            <label for="e-option">Extraurbane</label>
+            <div class="check"><div class="inside"></div></div>
+        </li>
+    </ul>
+</div>
+<!-- Fine sezione bottoni/filtri -->
+<!-- Inizio sezione Cerchio con colore della regione -->
+<div class="tooltip" style="top: 120px; left: 600px;">
+    <svg width="80" height="80">
+        <circle cx="40" cy="40" r="38" fill="none" z-index="5"/>
+    </svg>
+</div>
+<!-- Fine sezione Cerchio con colore della regione -->
+
+<script>
+    /* Intestazione in alto */
+    const header = d3.select('#header');
+    const instructions = header.append('div').attr('id', 'instructions').append('div');
+    instructions.append('p').text('Incidenti stradali in Italia');
+
+    /* Slider */
+    var slider = document.getElementById("range");
+    var output = document.getElementById("valoreAnno");
+    output.innerHTML = slider.value;
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+        annoSelezionato = this.value;
+        updateMap();
+    };
+    var annoSelezionato = slider.value;
+
+    /* Crea il contenuto html in tooltip div */
+    function tooltipHtml(n, d) {
+        var selezione1;
+        var selezione2;
+        var selezione3;
+
+        if (Filtro1 === "all") selezione1 = "Automobili e pedoni";
+        else if (Filtro1 === "cars") selezione1 = "Automobili";
+        else if (Filtro1 === "pedestrians") selezione1 = "Pedoni";
+
+        if (Filtro2 === "all") selezione2 = "urbani ed extraurbani";
+        else if (Filtro2 === "urban") selezione2 = "urbani";
+        else if (Filtro2 === "interurban") selezione2 = "extraurbani";
+
+        if (Filtro3 === "all") selezione3 = "feriti e morti";
+        else if (Filtro3 === "injured") selezione3 = "feriti";
+        else if (Filtro3 === "dead") selezione3 = "morti";
+
+        return "<h4 style='color:red'>" + n + "</h4><table>" +
+            "<tr><td>Filtri:</td><td>" + selezione1 + "</td></tr>" +
+            "<tr><td> - </td><td>" + selezione2 + "</td></tr>" +
+            "<tr><td> - </td><td>" + selezione3 + "</td></tr>" +
+            "<tr><td>Patentanti:</td><td>" + (d.patentati) + "</td></tr>" +
+            "<tr><td>Incidenti:</td><td>" + (d.incidenti) + "</td></tr>" +
+            "<tr><td>Incidenti/Patentanti:</td><td>" + ((d.rapporto)*100).roundTo(2) + "%" + "</td></tr>" +
+            "</table>";
+    }
+
+    function viewMap() {
+        var sampleData = {};
+        var i;
+        var codiceColore;
+        var regioni = getRegioniByYear(annoSelezionato);
+        rapporti_reg = rapportiRegioni(regioni, Filtro1, Filtro2, Filtro3);
+        rapportoMax = Math.max.apply(null, rapporti_reg);
+        for (i in regioni) {
+            incidentiPatentati = incidentiPatentatiFiltro(Filtro1, Filtro2, Filtro3, i);
+            patentati = incidentiPatentati.patentati;
+            incidenti = incidentiPatentati.incidenti;
+            rapporto = incidenti/patentati;
+            percentuale_norm = rapporto/rapportoMax;
+            codiceColore = d3.interpolateYlGn(percentuale_norm);
+            // solo il colore serve allo script di disegno mappa
+            sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, color:codiceColore};
+
+        }
+        /* Disegna distretti con id #statesvg */
+        uStates.draw("#statesvg", sampleData);
+        uStates.updateToolTip("#statesvg", sampleData, tooltipHtml)
+    }
+
+    /* AGGIORNA la mappa ... */
+    function updateMap() {
+        var sampleData = {};
+        var i;
+        var codiceColore;
+        var regioni = getRegioniByYear(annoSelezionato);
+        rapporti_reg = rapportiRegioni(regioni, Filtro1, Filtro2, Filtro3);
+        rapportoMax = Math.max.apply(null, rapporti_reg);
+        for (i in regioni) {
+            incidentiPatentati = incidentiPatentatiFiltro(Filtro1, Filtro2, Filtro3, i);
+            patentati = incidentiPatentati.patentati;
+            incidenti = incidentiPatentati.incidenti;
+            rapporto = incidenti/patentati;
+            percentuale_norm = rapporto/rapportoMax;
+            codiceColore = d3.interpolateYlGn(percentuale_norm);
+            sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, color:codiceColore};
+
+        }
+        uStates.update("#statesvg", sampleData);
+        uStates.updateToolTip("#statesvg", sampleData, tooltipHtml)
+    }
+
+    /* Aggiorna filtri */
+    function updateFiltroTipologia(filtro) {
+        Filtro1 = filtro;
+        updateMap();
+    }
+    function updateFiltroStrada(filtro) {
+        Filtro2 = filtro;
+        updateMap();
+    }
+    function updateFiltroGravita(filtro) {
+        Filtro3 = filtro;
+        updateMap();
+    }
+
+    /* Disegna la prima volta la mappa con impostazione di default "tutta la popolazione" */
+    viewMap();
+
+    d3.select(self.frameElement).style("height", "600px");
+
+    /* Arrotonda i numeri a x cifre decimali */
+    function roundTo(posizioneDecimale){
+        var i = this * Math.pow(10, posizioneDecimale);
+        i = Math.round(i);
+        return i / Math.pow(10,posizioneDecimale);
+    }
+    Number.prototype.roundTo = roundTo;
+
+</script>
+<script>
+
+    /* Ritorna un oggetto contenente il numero totale di abitanti per razza e sesso dell'intero Illinois */
+    function getTotale(){
+        var totale = 0;
+        var bianchi = 0;
+        var neri = 0;
+        var asiatici = 0;
+        var ispanici = 0;
+        var uomini = 0;
+        var donne = 0;
+        var totaleRace = 0;
+        for (var i = 0; i < distretti.length; i++) {
+            totale = totale + distretti[i].totale;
+            bianchi = bianchi + distretti[i].bianchi;
+            neri = neri + distretti[i].neri;
+            asiatici = asiatici + distretti[i].asiatici;
+            ispanici = ispanici + distretti[i].ispanici;
+            uomini = uomini + distretti[i].uomini;
+            donne = donne + distretti[i].donne;
+            totaleRace = totaleRace + distretti[i].totRace;
+        }
+        return {"totaleUD": totale, "bianchi": bianchi, "neri": neri, "asiatici": asiatici, "ispanici": ispanici, "uomini": uomini, "donne": donne, "totaleRace": totaleRace};
+    }
+
+    /* Ritorna un oggetto contenente il numero totale di fermi per razza e sesso dell'intero Illinois */
+    function getTotaleFermi(){
+        var totale = 0;
+        var bianchi = 0;
+        var neri = 0;
+        var asiatici = 0;
+        var ispanici = 0;
+        var uomini = 0;
+        var donne = 0;
+        for (var i = 0; i < distretti_fermi.length; i++) {
+            totale = totale + distretti_fermi[i].totale;
+            bianchi = bianchi + distretti_fermi[i].bianchi;
+            neri = neri + distretti_fermi[i].neri;
+            asiatici = asiatici + distretti_fermi[i].asiatici;
+            ispanici = ispanici + distretti_fermi[i].ispanici;
+            uomini = uomini + distretti_fermi[i].uomini;
+            donne = donne + distretti_fermi[i].donne;
+        }
+        return {"totale": totale, "bianchi": bianchi, "neri": neri, "asiatici": asiatici, "ispanici": ispanici, "uomini": uomini, "donne": donne};
+    }
+
+    var totaliDistretti = getTotale();
+
+    var totaliFermiDistretti = getTotaleFermi();
+
+    /* Dati per visualizzare la composizione percentuale degli abitanti dell'Illinois */
+    barData_default = [{Race: "White", Population: (totaliDistretti.bianchi/totaliDistretti.totaleRace)*100, Color: "#ffcccc"},
+        {Race: "Black", Population: (totaliDistretti.neri/totaliDistretti.totaleRace)*100, Color: "#663300"},
+        {Race: "Asian", Population: (totaliDistretti.asiatici/totaliDistretti.totaleRace)*100, Color: "#ffff99"},
+        {Race: "Hispanic", Population: (totaliDistretti.ispanici/totaliDistretti.totaleRace)*100, Color: "#ffb366"},
+        {Race: "Man", Population: (totaliDistretti.uomini/totaliDistretti.totaleUD)*100, Color: "#0066ff"},
+        {Race: "Woman", Population: (totaliDistretti.donne/totaliDistretti.totaleUD)*100, Color: "#ff3399"}
+    ];
+
+    /* Dati per visualizzare la composizione percentuale di fermi dell'Illinois */
+    barDataFermi_default = [{Race: "White", Population: (totaliFermiDistretti.bianchi/totaliFermiDistretti.totale)*100, Color: "red"},
+        {Race: "Black", Population: (totaliFermiDistretti.neri/totaliFermiDistretti.totale)*100, Color: "red"},
+        {Race: "Asian", Population: (totaliFermiDistretti.asiatici/totaliFermiDistretti.totale)*100, Color: "red"},
+        {Race: "Hispanic", Population: (totaliFermiDistretti.ispanici/totaliFermiDistretti.totale)*100, Color: "red"},
+        {Race: "Man", Population: (totaliFermiDistretti.uomini/totaliFermiDistretti.totale)*100, Color: "red"},
+        {Race: "Woman", Population: (totaliFermiDistretti.donne/totaliFermiDistretti.totale)*100, Color: "red"}
+    ];
+
+    /* Ritorna il valore più alto di un array di oggetti */
+    function getMax(barData) {
+        var max = 0;
+        var a;
+        for (var i = 0; i < barData.length; i++) {
+            a = Object.values(barData[i]);
+            for (var j = 0; j < a.length; j++) {
+                if (max <= a[j])
+                    max = a[j];
+            }
+        }
+        return max;
+    }
+
+    /* Ritorna il numero totale di fermi di ogni distretto */
+    function getTotaliFermi(barData) {
+        var totali = [];
+        var a;
+        var somma;
+        for (var i = 0; i < barData.length; i++) {
+            somma = barData[i].bianchi + barData[i].neri + barData[i].asiatici + barData[i].ispanici;
+            totali.push(["DIST"+ (i+1), somma]);
+        }
+        return totali;
+    }
+
+    var svg = d3.select("svg"),
+        margin = {
+            top: 50,
+            right: 50,
+            bottom: 30,
+            left: 80
+        },
+        width = +svg.attr("width") - margin.left - margin.right - 40,
+        height = +svg.attr("height") - margin.top - margin.bottom - 50,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var x = d3.scaleBand()
+        .rangeRound([0, width])
+        .padding(0.1);
+
+    var y = d3.scaleLinear()
+        .rangeRound([height, 0]);
+
+    /* Disegna la prima volta il Bar Chart con i dati della popolazione dell'intero Illinois */
+    function showBar(data, data2, distName) {
+        {
+            x.domain(data.map(function (d) {
+                return d.Race;
+            }));
+
+            var a;
+
+            /* Per l'asse y prendo il valore massimo tra i dati degli abitanti e quelli dei fermi */
+            if (getMax(data)>getMax(data2)) {
+                a = data;}
+            else {
+                a = data2;}
+
+            y.domain([0, d3.max(a, function (d) {
+                return Number(d.Population);
+            })]);
+
+            /* Asse x del grafico */
+            g.append("g")
+                .attr("class", "asseX")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x))
+
+            /* Asse y del grafico */
+            g.append("g")
+                .attr("class", "asseY")
+                .call(d3.axisLeft(y))
+                .append("text")
+                .attr("fill", "#000")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -30)
+                .attr("font-size", "1.5em")
+                .attr("dy", 0)
+                .attr("text-anchor", "end")
+                .text("Percentage of Population & Stops");
+
+            /* Titolo del grafico (numero distretto) */
+            g.append("g")
+                .append("text")
+                .attr("class", "title")
+                .attr("font-size", "1.5em")
+                .attr("y", -20)
+                .attr("x", (width/2)-80)
+                .text("- " + distName + " -");
+
+            /* Barre del grafico 2 (percentuale fermi)*/
+            g.selectAll(".bar2")
+                .data(data2)
+                .enter().append("rect")
+                .attr("class", "bar2")
+                .style("stroke-dasharray", ("10,3"))
+                .style("stroke", "red")
+                .style("stroke-width", 2)
+                .style("fill", "red")
+                .style("fill-opacity", 0.3)
+                .attr("x", function (d) {
+                    return x(d.Race)+0;
+                })
+                .attr("y", function (d) {
+                    return y(Number(d.Population));
+                })
+                .attr("width", x.bandwidth()-0)
+                .attr("height", function (d) {
+                    return height - y(Number(d.Population));
+                });
+
+            /* Barre del grafico (percentuale popolazione)*/
+            g.selectAll(".bar")
+                .data(data)
+                .enter().append("rect")
+                .attr("class", "bar")
+                .style("stroke", "black")
+                .style("stroke-width", 2)
+                .style("fill", function(d){ return d.Color;})
+                .style("fill-opacity", 0.6)
+                .attr("x", function (d) {
+                    return x(d.Race);
+                })
+                .attr("y", function (d) {
+                    return y(Number(d.Population));
+                })
+                .attr("width", x.bandwidth())
+                .attr("height", function (d) {
+                    return height - y(Number(d.Population));
+                });
+
+
+        }
+    }
+
+    /* Visualizzazione di default del Bar Chart (popolazione intero Illinois) */
+    showBar(barData_default, barDataFermi_default, "All Distrects");
+
+    /* Aggiornamento dati Bar Chart */
+    function updateBarChart(data, data2, distName) {
+        x.domain(data.map(function (d) {
+            return d.Race;
+        }));
+
+        var a;
+
+        /* Per l'asse y prendo il valore massimo tra i dati degli abitanti e quelli dei fermi */
+        if (getMax(data)>getMax(data2)) {
+            a = data;}
+        else {
+            a = data2;}
+
+        y.domain([0, d3.max(a, function (d) {
+            return Number(d.Population);
+        })]);
+
+        /* Aggiornamento barre del grafico 2 (percentuale fermi) */
+        svg.selectAll(".bar2")
+            .remove()
+            .exit()
+            .data(data2)
+            .enter().append("rect")
+            .attr("class", "bar2")
+            .style("stroke-dasharray", ("10,3"))
+            .style("stroke", "red")
+            .style("stroke-width", 2)
+            .style("fill", "red")
+            .style("fill-opacity", 0.3)
+            .attr("x", function (d) {
+                return (x(d.Race) + 80);
+            })
+            .attr("y", function (d) {
+                return (y(Number(d.Population)) + 50);
+            })
+            .attr("width", x.bandwidth())
+            .attr("height", function (d) {
+                return height - y(Number(d.Population));
+            });
+
+        /* Aggiornamento barre del grafico (percentuale popolazione)*/
+        svg.selectAll(".bar")
+            .remove()
+            .exit()
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .style("stroke", "black")
+            .style("stroke-width", 2)
+            .style("fill", function(d){ return d.Color;})
+            .style("fill-opacity", 0.6)
+            .attr("x", function (d) {
+                return (x(d.Race) + 80);
+            })
+            .attr("y", function (d) {
+                return (y(Number(d.Population)) + 50);
+            })
+            .attr("width", x.bandwidth())
+            .attr("height", function (d) {
+                return height - y(Number(d.Population));
+            });
+
+        /* Aggiornamento Asse X del grafico */
+        svg.select(".asseX")
+            .call(d3.axisBottom(x));
+
+        /* Aggiornamento Asse Y del grafico */
+        svg.select(".asseY")
+            .call(d3.axisLeft(y));
+
+        svg.selectAll(".title")
+            .attr("x", (width/2)-80)
+            .text("- " + distName + " -");
+    }
+</script>
+<!-- Fine sezione Bar Chart -->
+</body>
