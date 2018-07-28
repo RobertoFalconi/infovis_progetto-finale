@@ -297,3 +297,26 @@ var Sardegna2013 = {id: 'Sar', vu1t: 5522, vu1m: 690, vu1f: 24, ve1t: 773, ve1m:
 var Totale2013 = {id: 'Tot13', vu1t: 257421, vu1m: 35876, vu1f: 792, ve1t: 40773, ve1m: 14601, ve1f: 810, vu2t: 18608, vu2m: 89257, vu2f: 547, ve2t: 123205, ve2m: 24106, ve2f: 878, vu3t: 40469, vu3m: 8954, vu3f: 61, ve3t: 15874, ve3m: 4483, ve3f: 171, vu4t: 9499, vu4m: 2351, vu4f: 21, ve4t: 4831, ve4m: 1599, ve4f: 105, put: 4162, pum: 20655, puf: 410, pet: 20245, pem: 1128, pef: 139};
 var Regioni2013 = [Piemonte2013,ValledAosta2013,Lombardia2013,TrentinoAltoAdige2013,Veneto2013,FriuliVeneziaGiulia2013,Liguria2013,EmiliaRomagna2013,Toscana2013,Umbria2013,Marche2013,Lazio2013,Abruzzo2013,Molise2013,Campania2013,Puglia2013,Basilicata2013,Calabria2013,Sicilia2013,Sardegna2013];
 
+
+var AbruzzoPatenti = {id: 'Abr', patenti: 870682, popolazione: 1322247};
+var BasilicataPatenti = {id: 'Bas', patenti: 358072, popolazione: 570365};
+var CalabriaPatenti = {id: 'Cal', patenti: 1178561, popolazione: 1965128};
+var CampaniaPatenti = {id: 'Cam', patenti: 3354184, popolazione: 5839084};
+var EmiliaRomagnaPatenti = {id: 'Emi', patenti: 2985474, popolazione: 444841};
+var FriuliVeneziaGiuliaPatenti = {id: 'Fri', patenti: 828474, popolazione: 1217872};
+var LazioPatenti = {id: 'Laz', patenti: 3746345, popolazione: 5898124};
+var LiguriaPatenti = {id: 'Lig', patenti: 974858, popolazione: 1565307};
+var LombardiaPatenti = {id: 'Lom', patenti: 6444078, popolazione: 10018806};
+var MarchePatenti = {id: 'Mar', patenti: 1049334, popolazione: 1538055};
+var MolisePatenti = {id: 'Mol', patenti: 198524, popolazione: 310449};
+var PiemontePatenti = {id: 'Pie', patenti: 2899771, popolazione: 4392526};
+var PugliaPatenti = {id: 'Pug', patenti: 1075500, popolazione: 4063888};
+var SardegnaPatenti = {id: 'Sar', patenti: 1040608, popolazione: 1653135};
+var SiciliaPatenti = {id: 'Sic', patenti: 3130563, popolazione: 5056641};
+var ToscanaPatenti = {id: 'Tos', patenti: 2499004, popolazione: 3742437};
+var TrentinoAltoAdigePatenti = {id: 'Tre', patenti: 692327, popolazione: 1062860};
+var UmbriaPatenti = {id: 'Umb', patenti: 597491, popolazione: 888908};
+var ValledaostaPatenti = {id: 'Val', patenti: 87642, popolazione: 126883};
+var VenetoPatenti = {id: 'Ven', patenti: 3319135, popolazione: 4907529};
+var PatentiPopolazione = [AbruzzoPatenti,BasilicataPatenti,CalabriaPatenti,CampaniaPatenti,EmiliaRomagnaPatenti,FriuliVeneziaGiuliaPatenti,LazioPatenti,LiguriaPatenti,LombardiaPatenti,MarchePatenti,MolisePatenti,PiemontePatenti,PugliaPatenti,SardegnaPatenti,SiciliaPatenti,ToscanaPatenti,TrentinoAltoAdigePatenti,UmbriaPatenti,ValledaostaPatenti,VenetoPatenti];
+
