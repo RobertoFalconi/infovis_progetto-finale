@@ -7,7 +7,7 @@
     <title>ABRCA-DATA</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/mappaItalia.js"></script> <!-- Paths della mappa dell'Italia -->
-    <script src="js/dataset.js"></script> <!-- Datasets dei distretti -->
+    <script src="js/dataset.js"></script> <!-- Datasets delle regioni -->
     <script src="js/datasetRegioni.js"></script> <!-- Datasets delle regioni -->
     <script src="js/filtri.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script> <!-- D3.js versione 5 -->
@@ -146,6 +146,7 @@
         else if (Filtro3 === "dead") selezione3 = "morti";
 
         return "<h4 style='color:red'>" + n + "</h4><table>" +
+            "<tr><td>Anno:</td><td>" + annoSelezionato + "</td></tr>" +
             "<tr><td>Filtri:</td><td>" + selezione1 + "</td></tr>" +
             "<tr><td> - </td><td>" + selezione2 + "</td></tr>" +
             "<tr><td> - </td><td>" + selezione3 + "</td></tr>" +
