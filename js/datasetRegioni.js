@@ -318,5 +318,5 @@ var TrentinoAltoAdigePatenti = {id: 'Tre', patenti: 692327, popolazione: 1062860
 var UmbriaPatenti = {id: 'Umb', patenti: 597491, popolazione: 888908};
 var ValledaostaPatenti = {id: 'Val', patenti: 87642, popolazione: 126883};
 var VenetoPatenti = {id: 'Ven', patenti: 3319135, popolazione: 4907529};
-var PatentiPopolazione = [AbruzzoPatenti,BasilicataPatenti,CalabriaPatenti,CampaniaPatenti,EmiliaRomagnaPatenti,FriuliVeneziaGiuliaPatenti,LazioPatenti,LiguriaPatenti,LombardiaPatenti,MarchePatenti,MolisePatenti,PiemontePatenti,PugliaPatenti,SardegnaPatenti,SiciliaPatenti,ToscanaPatenti,TrentinoAltoAdigePatenti,UmbriaPatenti,ValledaostaPatenti,VenetoPatenti];
+var PatentiPopolazione = [PiemontePatenti,ValledaostaPatenti,LombardiaPatenti,TrentinoAltoAdigePatenti,VenetoPatenti,FriuliVeneziaGiuliaPatenti,LiguriaPatenti,EmiliaRomagnaPatenti,ToscanaPatenti,UmbriaPatenti,MarchePatenti,LazioPatenti,AbruzzoPatenti,MolisePatenti,CampaniaPatenti,PugliaPatenti,BasilicataPatenti,CalabriaPatenti,SiciliaPatenti,SardegnaPatenti];
 
