@@ -16,7 +16,7 @@ for i in lista:
             b=i[0].replace(" ","").replace("'","") + i[1]
             app.append(b)
             anno=i[1]
-            a = "var " + i[0].replace(" ","").replace("'","") + i[1] + " = {id: '" + i[0][0:3] + i[1][2:4] + "', vu1t: " + i[4] + ", vu1m: " + i[
+            a = "var " + i[0].replace(" ","").replace("'","") + i[1] + " = {id: '" + i[0][0:3] + "', vu1t: " + i[4] + ", vu1m: " + i[
                 5] + ", vu1f: " + i[6] + ", ve1t: " + i[7] + ", ve1m: " + i[8] + ", ve1f: " + i[9] + ", vu2t: " + i[
                     10] + ", vu2m: " + i[11] + ", vu2f: " + i[12] + ", ve2t: " + i[13] + ", ve2m: " + i[14] + ", ve2f: " + i[
                     15] + ", vu3t: " + i[16] + ", vu3m: " + i[17] + ", vu3f: " + i[18] + ", ve3t: " + i[19] + ", ve3m: " + i[
