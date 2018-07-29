@@ -52,6 +52,48 @@ function getRegioniByYear(year) {
     }
 }
 
+function getTotaleByYear(year) {
+    if (year === "2001") {
+        return Totale2001;
+    }
+    else if (year === "2002") {
+        return Totale2002;
+    }
+    else if (year === "2003") {
+        return Totale2003;
+    }
+    else if (year === "2004") {
+        return Totale2004;
+    }
+    else if (year === "2005") {
+        return Totale2005;
+    }
+    else if (year === "2006") {
+        return Totale2006;
+    }
+    else if (year === "2007") {
+        return Totale2007;
+    }
+    else if (year === "2008") {
+        return Totale2008;
+    }
+    else if (year === "2009") {
+        return Totale2009;
+    }
+    else if (year === "2010") {
+        return Totale2010;
+    }
+    else if (year === "2011") {
+        return Totale2011;
+    }
+    else if (year === "2012") {
+        return Totale2012;
+    }
+    else if (year === "2013") {
+        return Totale2013;
+    }
+}
+
 var Piemonte2001 = {id: 'Pie', vu1t: 25072, vu1m: 2641, vu1f: 123, ve1t: 3046, ve1m: 1572, ve1f: 127, vu2t: 2013, vu2m: 8659, vu2f: 117, ve2t: 12639, ve2m: 2308, ve2f: 136, vu3t: 3901, vu3m: 1127, vu3f: 13, ve3t: 2026, ve3m: 552, ve3f: 37, vu4t: 1222, vu4m: 55, vu4f: 0, ve4t: 106, ve4m: 39, ve4f: 10, put: 119, pum: 1401, puf: 46, pet: 1355, pem: 74, pef: 16};
 var ValledAosta2001 = {id: 'Val', vu1t: 618, vu1m: 61, vu1f: 1, ve1t: 82, ve1m: 59, ve1f: 5, vu2t: 79, vu2m: 183, vu2f: 3, ve2t: 243, ve2m: 91, ve2f: 5, vu3t: 136, vu3m: 34, vu3f: 1, ve3t: 49, ve3m: 18, ve3f: 1, vu4t: 27, vu4m: 0, vu4f: 0, ve4t: 0, ve4m: 1, ve4f: 0, put: 2, pum: 32, puf: 1, pet: 31, pem: 8, pef: 0};
 var Lombardia2001 = {id: 'Lom', vu1t: 75851, vu1m: 10001, vu1f: 226, ve1t: 11553, ve1m: 2746, ve1f: 169, vu2t: 3632, vu2m: 30935, vu2f: 277, ve2t: 42426, ve2m: 4864, ve2f: 253, vu3t: 7749, vu3m: 3306, vu3f: 38, ve3t: 5880, ve3m: 1553, ve3f: 90, vu4t: 3148, vu4m: 566, vu4f: 6, ve4t: 1169, ve4m: 100, ve4f: 14, put: 294, pum: 4617, puf: 106, pet: 4511, pem: 160, pef: 19};

@@ -17,11 +17,12 @@
 <div id="header"> </div>
 <div id="tooltip" style="z-index: 1000;"></div>
 <!-- Grafico: bar plot -->
-<svg width="500" height="400" style="position: absolute; top: 100px; left: 800px; z-index: 2;"></svg>
+<svg width="2000" height="400" style="position: absolute; top: 100px; left: 800px; z-index: 2;"></svg>
 <!-- Fine Grafico -->
 <!-- Mappa -->
 <svg width="700" height="750" id="statesvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
 <!-- Fine Mappa -->
+<div style="position: absolute; top: 100px; left: 50px;"><button onclick="resetDefault()">Reset</button></div>
 <!-- Inizio scala colore laterale -->
 <div class="container" style="top: 150px; left: 50px; z-index: 1;">
     <h4>Numero <br> alto di <br>incidenti</h4>
@@ -45,7 +46,7 @@
     <h2>Seleziona gravità</h2>
     <ul>
         <li>
-            <input type="radio" id="at-option" name="selector-severity" checked="checked" onclick="updateFiltroGravita('all'), updateBarChart(barData_default, barDataFermi_default, 'All Distrects')">
+            <input type="radio" id="at-option" name="selector-severity" checked="checked" onclick="updateFiltroGravita('all')">
             <label for="at-option">Tutti</label>
             <div class="check"></div>
         </li>
@@ -116,6 +117,10 @@
     const instructions = header.append('div').attr('id', 'instructions').append('div');
     instructions.append('p').text('Incidenti stradali in Italia');
 
+    function getIntestazioneBarChart() {
+        if (indexRegioneCliccata !== -1) return getRegioniByYear(annoSelezionato)[indexRegioneCliccata].id;
+        return "Totale Italia";
+    }
     /* Slider */
     var slider = document.getElementById("range");
     var output = document.getElementById("valoreAnno");
@@ -124,6 +129,7 @@
         output.innerHTML = this.value;
         annoSelezionato = this.value;
         updateMap();
+        updateBarChart(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", anno " + annoSelezionato)
     };
     var annoSelezionato = slider.value;
 
@@ -155,12 +161,15 @@
             "<tr><td>Incidenti/Patentanti:</td><td>" + ((d.rapporto)*100).roundTo(2) + "%" + "</td></tr>" +
             "</table>";
     }
+    
+    var totalePerAnnoSelezionato = getTotaleByYear(annoSelezionato);
 
     function viewMap() {
         var sampleData = {};
         var i;
         var codiceColore;
         var regioni = getRegioniByYear(annoSelezionato);
+        totalePerAnnoSelezionato = getTotaleByYear(annoSelezionato);
         rapporti_reg = rapportiRegioni(regioni, Filtro1, Filtro2, Filtro3);
         rapportoMax = Math.max.apply(null, rapporti_reg);
         for (i in regioni) {
@@ -171,20 +180,22 @@
             percentuale_norm = rapporto/rapportoMax;
             codiceColore = d3.interpolateYlGn(percentuale_norm);
             // solo il colore serve allo script di disegno mappa
-            sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, color:codiceColore};
+            var regione = regioni[i];
+            sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, regione, i, annoSelezionato, color:codiceColore};
 
         }
         /* Disegna distretti con id #statesvg */
         uStates.draw("#statesvg", sampleData);
         uStates.updateToolTip("#statesvg", sampleData, tooltipHtml)
     }
-
+    
     /* AGGIORNA la mappa ... */
     function updateMap() {
         var sampleData = {};
         var i;
         var codiceColore;
         var regioni = getRegioniByYear(annoSelezionato);
+        totalePerAnnoSelezionato = getTotaleByYear(annoSelezionato);
         rapporti_reg = rapportiRegioni(regioni, Filtro1, Filtro2, Filtro3);
         rapportoMax = Math.max.apply(null, rapporti_reg);
         for (i in regioni) {
@@ -194,7 +205,8 @@
             rapporto = incidenti/patentati;
             percentuale_norm = rapporto/rapportoMax;
             codiceColore = d3.interpolateYlGn(percentuale_norm);
-            sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, color:codiceColore};
+            var regione = regioni[i];
+            sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, regione, i, annoSelezionato, color:codiceColore};
 
         }
         uStates.update("#statesvg", sampleData);
@@ -228,101 +240,42 @@
     }
     Number.prototype.roundTo = roundTo;
 
+    function resetDefault() {
+        location.reload();
+    }
 </script>
 <script>
-
-    /* Ritorna un oggetto contenente il numero totale di abitanti per razza e sesso dell'intero Illinois */
-    function getTotale(){
-        var totale = 0;
-        var bianchi = 0;
-        var neri = 0;
-        var asiatici = 0;
-        var ispanici = 0;
-        var uomini = 0;
-        var donne = 0;
-        var totaleRace = 0;
-        for (var i = 0; i < distretti.length; i++) {
-            totale = totale + distretti[i].totale;
-            bianchi = bianchi + distretti[i].bianchi;
-            neri = neri + distretti[i].neri;
-            asiatici = asiatici + distretti[i].asiatici;
-            ispanici = ispanici + distretti[i].ispanici;
-            uomini = uomini + distretti[i].uomini;
-            donne = donne + distretti[i].donne;
-            totaleRace = totaleRace + distretti[i].totRace;
-        }
-        return {"totaleUD": totale, "bianchi": bianchi, "neri": neri, "asiatici": asiatici, "ispanici": ispanici, "uomini": uomini, "donne": donne, "totaleRace": totaleRace};
+    
+    
+    function getIncidentiStradePerAnno() {
+        if (indexRegioneCliccata !== -1) {
+            var regioneCliccata = getRegioniByYear(annoSelezionato)[indexRegioneCliccata];
+            return [{Tipology: "Extra", Population: (regioneCliccata.ve1t+regioneCliccata.ve3t+regioneCliccata.ve2t+regioneCliccata.ve4t+regioneCliccata.pet), Color: "#ffcccc"},
+                {Tipology: "Urban", Population:  (regioneCliccata.vu1t+regioneCliccata.vu3t+regioneCliccata.vu2t+regioneCliccata.vu4t+regioneCliccata.put), Color: "#663300"}
+            ];
+        }  
+        return [{Tipology: "Extra", Population: (totalePerAnnoSelezionato.ve1t+totalePerAnnoSelezionato.ve3t+totalePerAnnoSelezionato.ve2t+totalePerAnnoSelezionato.ve4t+totalePerAnnoSelezionato.pet), Color: "#ffcccc"},
+            {Tipology: "Urban", Population:  (totalePerAnnoSelezionato.vu1t+totalePerAnnoSelezionato.vu3t+totalePerAnnoSelezionato.vu2t+totalePerAnnoSelezionato.vu4t+totalePerAnnoSelezionato.put), Color: "#663300"}
+        ];
+    }
+    
+    function getIncidentiMortiFeritiPerAnno() {
+        if (indexRegioneCliccata !== -1) {
+            var regioneCliccata = getRegioniByYear(annoSelezionato)[indexRegioneCliccata];
+            return [{Tipology: "Feriti", Population: (regioneCliccata.ve1f+regioneCliccata.ve3f+regioneCliccata.ve2f+regioneCliccata.ve4f+regioneCliccata.pef+regioneCliccata.vu1f+regioneCliccata.vu3f+regioneCliccata.vu2f+regioneCliccata.vu4f+regioneCliccata.puf), Color: "red"},
+                {Tipology: "Morti", Population: (regioneCliccata.ve1m+regioneCliccata.ve3m+regioneCliccata.ve2m+regioneCliccata.ve4m+regioneCliccata.pem+regioneCliccata.vu1m+regioneCliccata.vu3m+regioneCliccata.vu2m+regioneCliccata.vu4m+regioneCliccata.pum), Color: "red"}
+            ];
+        } 
+        return [{Tipology: "Feriti", Population: (totalePerAnnoSelezionato.ve1f+totalePerAnnoSelezionato.ve3f+totalePerAnnoSelezionato.ve2f+totalePerAnnoSelezionato.ve4f+totalePerAnnoSelezionato.pef+totalePerAnnoSelezionato.vu1f+totalePerAnnoSelezionato.vu3f+totalePerAnnoSelezionato.vu2f+totalePerAnnoSelezionato.vu4f+totalePerAnnoSelezionato.puf), Color: "red"},
+            {Tipology: "Morti", Population: (totalePerAnnoSelezionato.ve1m+totalePerAnnoSelezionato.ve3m+totalePerAnnoSelezionato.ve2m+totalePerAnnoSelezionato.ve4m+totalePerAnnoSelezionato.pem+totalePerAnnoSelezionato.vu1m+totalePerAnnoSelezionato.vu3m+totalePerAnnoSelezionato.vu2m+totalePerAnnoSelezionato.vu4m+totalePerAnnoSelezionato.pum), Color: "red"}
+        ];
     }
 
-    /* Ritorna un oggetto contenente il numero totale di fermi per razza e sesso dell'intero Illinois */
-    function getTotaleFermi(){
-        var totale = 0;
-        var bianchi = 0;
-        var neri = 0;
-        var asiatici = 0;
-        var ispanici = 0;
-        var uomini = 0;
-        var donne = 0;
-        for (var i = 0; i < distretti_fermi.length; i++) {
-            totale = totale + distretti_fermi[i].totale;
-            bianchi = bianchi + distretti_fermi[i].bianchi;
-            neri = neri + distretti_fermi[i].neri;
-            asiatici = asiatici + distretti_fermi[i].asiatici;
-            ispanici = ispanici + distretti_fermi[i].ispanici;
-            uomini = uomini + distretti_fermi[i].uomini;
-            donne = donne + distretti_fermi[i].donne;
-        }
-        return {"totale": totale, "bianchi": bianchi, "neri": neri, "asiatici": asiatici, "ispanici": ispanici, "uomini": uomini, "donne": donne};
-    }
+    barData_default = getIncidentiStradePerAnno();
 
-    var totaliDistretti = getTotale();
-
-    var totaliFermiDistretti = getTotaleFermi();
-
-    /* Dati per visualizzare la composizione percentuale degli abitanti dell'Illinois */
-    barData_default = [{Race: "White", Population: (totaliDistretti.bianchi/totaliDistretti.totaleRace)*100, Color: "#ffcccc"},
-        {Race: "Black", Population: (totaliDistretti.neri/totaliDistretti.totaleRace)*100, Color: "#663300"},
-        {Race: "Asian", Population: (totaliDistretti.asiatici/totaliDistretti.totaleRace)*100, Color: "#ffff99"},
-        {Race: "Hispanic", Population: (totaliDistretti.ispanici/totaliDistretti.totaleRace)*100, Color: "#ffb366"},
-        {Race: "Man", Population: (totaliDistretti.uomini/totaliDistretti.totaleUD)*100, Color: "#0066ff"},
-        {Race: "Woman", Population: (totaliDistretti.donne/totaliDistretti.totaleUD)*100, Color: "#ff3399"}
-    ];
-
-    /* Dati per visualizzare la composizione percentuale di fermi dell'Illinois */
-    barDataFermi_default = [{Race: "White", Population: (totaliFermiDistretti.bianchi/totaliFermiDistretti.totale)*100, Color: "red"},
-        {Race: "Black", Population: (totaliFermiDistretti.neri/totaliFermiDistretti.totale)*100, Color: "red"},
-        {Race: "Asian", Population: (totaliFermiDistretti.asiatici/totaliFermiDistretti.totale)*100, Color: "red"},
-        {Race: "Hispanic", Population: (totaliFermiDistretti.ispanici/totaliFermiDistretti.totale)*100, Color: "red"},
-        {Race: "Man", Population: (totaliFermiDistretti.uomini/totaliFermiDistretti.totale)*100, Color: "red"},
-        {Race: "Woman", Population: (totaliFermiDistretti.donne/totaliFermiDistretti.totale)*100, Color: "red"}
-    ];
-
-    /* Ritorna il valore più alto di un array di oggetti */
-    function getMax(barData) {
-        var max = 0;
-        var a;
-        for (var i = 0; i < barData.length; i++) {
-            a = Object.values(barData[i]);
-            for (var j = 0; j < a.length; j++) {
-                if (max <= a[j])
-                    max = a[j];
-            }
-        }
-        return max;
-    }
+    barData2_default = getIncidentiMortiFeritiPerAnno();
 
     /* Ritorna il numero totale di fermi di ogni distretto */
-    function getTotaliFermi(barData) {
-        var totali = [];
-        var a;
-        var somma;
-        for (var i = 0; i < barData.length; i++) {
-            somma = barData[i].bianchi + barData[i].neri + barData[i].asiatici + barData[i].ispanici;
-            totali.push(["DIST"+ (i+1), somma]);
-        }
-        return totali;
-    }
-
     var svg = d3.select("svg"),
         margin = {
             top: 50,
@@ -330,41 +283,69 @@
             bottom: 30,
             left: 80
         },
-        width = +svg.attr("width") - margin.left - margin.right - 40,
-        height = +svg.attr("height") - margin.top - margin.bottom - 50,
+        width = 610,
+        height = 230,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var x = d3.scaleBand()
-        .rangeRound([0, width])
-        .padding(0.1);
+        .rangeRound([0, width*0.2])
+        .padding(0.3);
 
     var y = d3.scaleLinear()
         .rangeRound([height, 0]);
 
-    /* Disegna la prima volta il Bar Chart con i dati della popolazione dell'intero Illinois */
-    function showBar(data, data2, distName) {
+    var svg2 = d3.select("svg"),
+        margin2 = {
+            top: 50,
+            right: 50,
+            bottom: 30,
+            left: 80
+        },
+        width2 = width,
+        height2 = 230,
+        g2= svg2.append("g").attr("transform", "translate(" + (height2+70) + "," + margin2.top + ")");
+
+    var x2 = d3.scaleBand()
+        .rangeRound([0, width2*0.2])
+        .padding(0.3);
+
+    var y2 = d3.scaleLinear()
+        .rangeRound([height2, 0]);
+
+
+    /* Disegna la prima volta il Bar Chart con i dati dell'Italia l'anno di default */
+    function showBar(data, data2, nomeRegione) {
         {
             x.domain(data.map(function (d) {
-                return d.Race;
+            return d.Tipology;
             }));
 
-            var a;
+            x2.domain(data2.map(function (d) {
+                return d.Tipology;
+            }));
+            
+            var maxBar1, maxBar2;
 
-            /* Per l'asse y prendo il valore massimo tra i dati degli abitanti e quelli dei fermi */
-            if (getMax(data)>getMax(data2)) {
-                a = data;}
+            /* Per l'asse y prendo il valore massimo tra i tipi di dato */
+            if (data[0].Population>data[1].Population) {
+                maxBar1 = data[0].Population;}
             else {
-                a = data2;}
+                maxBar1 = data[1].Population;}
 
-            y.domain([0, d3.max(a, function (d) {
-                return Number(d.Population);
-            })]);
+            if (data2[0].Population>data2[1].Population) {
+                maxBar2 = data2[0].Population;}
+            else {
+                maxBar2 = data2[1].Population;}
+
+            y.domain([0, maxBar1]);
+
+            y2.domain([0, maxBar2]);
 
             /* Asse x del grafico */
             g.append("g")
                 .attr("class", "asseX")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x))
+                .call(d3.axisBottom(x));
 
             /* Asse y del grafico */
             g.append("g")
@@ -375,9 +356,9 @@
                 .attr("transform", "rotate(-90)")
                 .attr("y", -30)
                 .attr("font-size", "1.5em")
-                .attr("dy", 0)
+                .attr("dy", -30)
                 .attr("text-anchor", "end")
-                .text("Percentage of Population & Stops");
+                .text("Strade urbane ed extraurbane");
 
             /* Titolo del grafico (numero distretto) */
             g.append("g")
@@ -386,28 +367,7 @@
                 .attr("font-size", "1.5em")
                 .attr("y", -20)
                 .attr("x", (width/2)-80)
-                .text("- " + distName + " -");
-
-            /* Barre del grafico 2 (percentuale fermi)*/
-            g.selectAll(".bar2")
-                .data(data2)
-                .enter().append("rect")
-                .attr("class", "bar2")
-                .style("stroke-dasharray", ("10,3"))
-                .style("stroke", "red")
-                .style("stroke-width", 2)
-                .style("fill", "red")
-                .style("fill-opacity", 0.3)
-                .attr("x", function (d) {
-                    return x(d.Race)+0;
-                })
-                .attr("y", function (d) {
-                    return y(Number(d.Population));
-                })
-                .attr("width", x.bandwidth()-0)
-                .attr("height", function (d) {
-                    return height - y(Number(d.Population));
-                });
+                .text("- " + nomeRegione + " -");
 
             /* Barre del grafico (percentuale popolazione)*/
             g.selectAll(".bar")
@@ -419,7 +379,7 @@
                 .style("fill", function(d){ return d.Color;})
                 .style("fill-opacity", 0.6)
                 .attr("x", function (d) {
-                    return x(d.Race);
+                    return x(d.Tipology);
                 })
                 .attr("y", function (d) {
                     return y(Number(d.Population));
@@ -430,51 +390,99 @@
                 });
 
 
+            /* Asse x del grafico */
+            g2.append("g")
+                .attr("class", "asseX")
+                .attr("transform", "translate(0," + height2 + ")")
+                .call(d3.axisBottom(x2));
+
+            /* Asse y del grafico */
+            g2.append("g")
+                .attr("class", "asseY2")
+                .call(d3.axisLeft(y2))
+                .append("text")
+                .attr("fill", "#000")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -30)
+                .attr("font-size", "1.5em")
+                .attr("dy", -30)
+                .attr("text-anchor", "end")
+                .text("Morti e feriti");
+
+            /* Barre del grafico 2 (percentuale fermi)*/
+            g2.selectAll(".bar2")
+                .data(data2)
+                .enter().append("rect")
+                .attr("class", "bar2")
+                .style("stroke", "black")
+                .style("stroke-width", 2)
+                .style("fill", function(d){ return d.Color;})
+                .style("fill-opacity", 0.6)
+                .attr("x", function (d) {
+                    return x2(d.Tipology);
+                })
+                .attr("y", function (d) {
+                    return y2(Number(d.Population));
+                })
+                .attr("width", x2.bandwidth())
+                .attr("height", function (d) {
+                    return height2 - y2(Number(d.Population));
+                });
+
+
         }
     }
 
     /* Visualizzazione di default del Bar Chart (popolazione intero Illinois) */
-    showBar(barData_default, barDataFermi_default, "All Distrects");
-
+    showBar(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", anno " + annoSelezionato);
     /* Aggiornamento dati Bar Chart */
     function updateBarChart(data, data2, distName) {
         x.domain(data.map(function (d) {
-            return d.Race;
+            return d.Tipology;
         }));
 
-        var a;
+        x2.domain(data2.map(function (d) {
+            return d.Tipology;
+        }));
+        
+        var maxBar1, maxBar2;
 
-        /* Per l'asse y prendo il valore massimo tra i dati degli abitanti e quelli dei fermi */
-        if (getMax(data)>getMax(data2)) {
-            a = data;}
+        /* Per l'asse y prendo il valore massimo tra i tipi di dato */
+        if (data[0].Population>data[1].Population) {
+            maxBar1 = data[0].Population;}
         else {
-            a = data2;}
+            maxBar1 = data[1].Population;}
 
-        y.domain([0, d3.max(a, function (d) {
-            return Number(d.Population);
-        })]);
+        if (data2[0].Population>data2[1].Population) {
+            maxBar2 = data2[0].Population;}
+        else {
+            maxBar2 = data2[1].Population;}
+
+        y.domain([0, maxBar1]);
+
+        y2.domain([0, maxBar2]);
+
 
         /* Aggiornamento barre del grafico 2 (percentuale fermi) */
-        svg.selectAll(".bar2")
+        svg2.selectAll(".bar2")
             .remove()
             .exit()
             .data(data2)
             .enter().append("rect")
             .attr("class", "bar2")
-            .style("stroke-dasharray", ("10,3"))
-            .style("stroke", "red")
+            .style("stroke", "black")
             .style("stroke-width", 2)
-            .style("fill", "red")
-            .style("fill-opacity", 0.3)
-            .attr("x", function (d) {
-                return (x(d.Race) + 80);
+            .style("fill", function(d2){ return d2.Color;})
+            .style("fill-opacity", 0.6)
+            .attr("x", function (d2) {
+                return (x2(d2.Tipology)+80+height);
             })
-            .attr("y", function (d) {
-                return (y(Number(d.Population)) + 50);
+            .attr("y", function (d2) {
+                return (y2(Number(d2.Population))+50);
             })
-            .attr("width", x.bandwidth())
-            .attr("height", function (d) {
-                return height - y(Number(d.Population));
+            .attr("width", x2.bandwidth())
+            .attr("height", function (d2) {
+                return height2 - y2(Number(d2.Population));
             });
 
         /* Aggiornamento barre del grafico (percentuale popolazione)*/
@@ -489,7 +497,7 @@
             .style("fill", function(d){ return d.Color;})
             .style("fill-opacity", 0.6)
             .attr("x", function (d) {
-                return (x(d.Race) + 80);
+                return (x(d.Tipology)+80);
             })
             .attr("y", function (d) {
                 return (y(Number(d.Population)) + 50);
@@ -499,13 +507,11 @@
                 return height - y(Number(d.Population));
             });
 
-        /* Aggiornamento Asse X del grafico */
-        svg.select(".asseX")
-            .call(d3.axisBottom(x));
-
         /* Aggiornamento Asse Y del grafico */
-        svg.select(".asseY")
-            .call(d3.axisLeft(y));
+       svg.select(".asseY")
+        .call(d3.axisLeft(y));
+        svg2.select(".asseY2")
+        .call(d3.axisLeft(y2));
 
         svg.selectAll(".title")
             .attr("x", (width/2)-80)
