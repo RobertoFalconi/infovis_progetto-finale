@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!--suppress JSAnnotator -->
 <html >
 
 <head>
@@ -7,7 +6,6 @@
     <title>ABRCA-DATA</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/mappaItalia.js"></script> <!-- Paths della mappa dell'Italia -->
-    <script src="js/dataset.js"></script> <!-- Datasets delle regioni -->
     <script src="js/datasetRegioni.js"></script> <!-- Datasets delle regioni -->
     <script src="js/filtri.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script> <!-- D3.js versione 5 -->
@@ -20,7 +18,7 @@
 <svg width="2000" height="400" style="position: absolute; top: 100px; left: 800px; z-index: 2;"></svg>
 <!-- Fine Grafico -->
 <!-- Mappa -->
-<svg width="700" height="750" id="statesvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
+<svg width="700" height="750" id="italiasvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
 <!-- Fine Mappa -->
 <div style="position: absolute; top: 100px; left: 50px;"><button onclick="resetDefault()">Reset</button></div>
 <!-- Inizio scala colore laterale -->
@@ -109,7 +107,7 @@
         <circle cx="40" cy="40" r="38" fill="none" z-index="5"/>
     </svg>
 </div>
-<!-- Fine sezione Cerchio con colore della regione -->
+
 
 <script>
     /* Intestazione in alto */
@@ -118,7 +116,15 @@
     instructions.append('p').text('Incidenti stradali in Italia');
 
     function getIntestazioneBarChart() {
-        if (indexRegioneCliccata !== -1) return getRegioniByYear(annoSelezionato)[indexRegioneCliccata].id;
+        if (indexRegioneCliccata !== -1) {
+            var identificativo=getRegioniByYear(annoSelezionato)[indexRegioneCliccata].id;
+            for (i in pathRegioni){
+                if (pathRegioni[i].id==identificativo){
+                    return pathRegioni[i].n;
+                }
+            }
+
+        }
         return "Totale Italia";
     }
     /* Slider */
@@ -133,7 +139,7 @@
     };
     var annoSelezionato = slider.value;
 
-    /* Crea il contenuto html in tooltip div */
+    /* Tooltip */
     function tooltipHtml(n, d) {
         var selezione1;
         var selezione2;
@@ -184,12 +190,12 @@
             sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, regione, i, annoSelezionato, color:codiceColore};
 
         }
-        /* Disegna distretti con id #statesvg */
-        uStates.draw("#statesvg", sampleData);
-        uStates.updateToolTip("#statesvg", sampleData, tooltipHtml)
+        /* Disegno delle regioni */
+        Italy.draw("#italiasvg", sampleData);
+        Italy.updateToolTip("#italiasvg", sampleData, tooltipHtml)
     }
     
-    /* AGGIORNA la mappa ... */
+
     function updateMap() {
         var sampleData = {};
         var i;
@@ -209,8 +215,8 @@
             sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, regione, i, annoSelezionato, color:codiceColore};
 
         }
-        uStates.update("#statesvg", sampleData);
-        uStates.updateToolTip("#statesvg", sampleData, tooltipHtml)
+        Italy.update("#italiasvg", sampleData);
+        Italy.updateToolTip("#italiasvg", sampleData, tooltipHtml)
     }
 
     /* Aggiorna filtri */
@@ -275,7 +281,7 @@
 
     barData2_default = getIncidentiMortiFeritiPerAnno();
 
-    /* Ritorna il numero totale di fermi di ogni distretto */
+    /* Preparazione dell'area adibita ai BarCharts */
     var svg = d3.select("svg"),
         margin = {
             top: 50,
@@ -313,7 +319,7 @@
         .rangeRound([height2, 0]);
 
 
-    /* Disegna la prima volta il Bar Chart con i dati dell'Italia l'anno di default */
+    /* Disegna la prima volta il Bar Chart con i dati dell'Italia e  l'anno di default */
     function showBar(data, data2, nomeRegione) {
         {
             x.domain(data.map(function (d) {
@@ -341,13 +347,15 @@
 
             y2.domain([0, maxBar2]);
 
-            /* Asse x del grafico */
+            /*Grafico 1 Strade urbane ed extra urbane*/
+
+            /* X grafico 1 */
             g.append("g")
                 .attr("class", "asseX")
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x));
 
-            /* Asse y del grafico */
+            /* Y grafico 1 */
             g.append("g")
                 .attr("class", "asseY")
                 .call(d3.axisLeft(y))
@@ -360,7 +368,7 @@
                 .attr("text-anchor", "end")
                 .text("Strade urbane ed extraurbane");
 
-            /* Titolo del grafico (numero distretto) */
+            /* Titolo */
             g.append("g")
                 .append("text")
                 .attr("class", "title")
@@ -369,7 +377,7 @@
                 .attr("x", (width/2)-80)
                 .text("- " + nomeRegione + " -");
 
-            /* Barre del grafico (percentuale popolazione)*/
+            /* Realizzazione delle bar grafico 1*/
             g.selectAll(".bar")
                 .data(data)
                 .enter().append("rect")
@@ -389,14 +397,15 @@
                     return height - y(Number(d.Population));
                 });
 
+            /*Grafico 2 incidenti e feriti*/
 
-            /* Asse x del grafico */
+            /* X grafico 2 */
             g2.append("g")
                 .attr("class", "asseX")
                 .attr("transform", "translate(0," + height2 + ")")
                 .call(d3.axisBottom(x2));
 
-            /* Asse y del grafico */
+            /* Y grafico 2 */
             g2.append("g")
                 .attr("class", "asseY2")
                 .call(d3.axisLeft(y2))
@@ -409,7 +418,7 @@
                 .attr("text-anchor", "end")
                 .text("Morti e feriti");
 
-            /* Barre del grafico 2 (percentuale fermi)*/
+            /* Realizzazione delle bar grafico 2 */
             g2.selectAll(".bar2")
                 .data(data2)
                 .enter().append("rect")
@@ -433,10 +442,10 @@
         }
     }
 
-    /* Visualizzazione di default del Bar Chart (popolazione intero Illinois) */
+    /* Di default si visualizza il totale di incidenti e vittime per l'anno selezionato */
     showBar(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", anno " + annoSelezionato);
     /* Aggiornamento dati Bar Chart */
-    function updateBarChart(data, data2, distName) {
+    function updateBarChart(data, data2, NomeRegione) {
         x.domain(data.map(function (d) {
             return d.Tipology;
         }));
@@ -463,7 +472,7 @@
         y2.domain([0, maxBar2]);
 
 
-        /* Aggiornamento barre del grafico 2 (percentuale fermi) */
+        /* Aggiornamento barre del grafico 2 */
         svg2.selectAll(".bar2")
             .remove()
             .exit()
@@ -485,7 +494,7 @@
                 return height2 - y2(Number(d2.Population));
             });
 
-        /* Aggiornamento barre del grafico (percentuale popolazione)*/
+        /* Aggiornamento barre del grafico 1*/
         svg.selectAll(".bar")
             .remove()
             .exit()
@@ -507,7 +516,7 @@
                 return height - y(Number(d.Population));
             });
 
-        /* Aggiornamento Asse Y del grafico */
+        /* Aggiornamento Asse Y */
        svg.select(".asseY")
         .call(d3.axisLeft(y));
         svg2.select(".asseY2")
@@ -515,8 +524,8 @@
 
         svg.selectAll(".title")
             .attr("x", (width/2)-80)
-            .text("- " + distName + " -");
+            .text("- " + NomeRegione + " -");
     }
 </script>
-<!-- Fine sezione Bar Chart -->
+
 </body>

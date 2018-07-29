@@ -6,7 +6,7 @@ body, html{
     font-family: 'Lato', sans-serif;
 }
 
-/* Inizio sezione Bar Charts */
+/* Bar Charts */
 .bar {
     fill:  rgb(212, 63, 63);
 }
@@ -14,7 +14,7 @@ body, html{
 .bar:hover {
     opacity: 0.7;
 }
-/* Fine sezione Bar Charts */
+
 
 
 circle{
@@ -22,7 +22,7 @@ circle{
     opacity: 0.1;
 }
 
-/* Inizio sezione in alto */
+/* Titolo */
 #instructions {
     position: absolute;
     font-size: 1.2em;
@@ -35,28 +35,28 @@ circle{
     text-align: center;
     padding: .2em;
 }
-/* Fine sezione in alto */
 
 
-/* Inizio sezione Distretti */
-.state{
+
+/* Regioni */
+.italia{
     /*fill: none;*/
     stroke: #000000;
     stroke-width: 1;
 }
 
-.state:hover {
+.italia:hover {
     fill-opacity:0.1;
 }
 
-/* Inizio sezione Immagine con scala dei colori */
+/* Colori */
 img:hover {
     opacity:0.8;
 }
-/* Fine sezione Immagine con scala dei colori */
 
 
-/* Inizio sezione Tooltip con informazioni sui distretti */
+
+/* Tooltip Regioni */
 #tooltip {
     position: absolute;
     text-align: center;
@@ -102,10 +102,10 @@ img:hover {
 #tooltip tr td:nth-child(2){
     text-align:center;
 }
-/* Fine sezione Tooltip con informazioni sui distretti */
 
 
-/* Inizio sezione Tooltip per scala dei colori */
+
+/* Tooltip colori */
 .tooltip {
     position: relative;
     display: inline-block;
@@ -144,10 +144,10 @@ img:hover {
     visibility: visible;
     opacity: 0.9;
 }
-/* Fine sezione Tooltip per scala dei colori */
 
 
-/* Inizio container, h2, ul, li ecc. */
+
+/* Container */
 .container{
     position: absolute;
     height: 450px;
@@ -300,7 +300,8 @@ input[type=radio]:checked ~ label{
 }
 
 
-/* Inizio sezione select per scelta scala cromatica */
+/* Scelta colore */
+/*NON IMPLEMENTATO */
 
 select {
     -webkit-appearance: none;
@@ -332,7 +333,7 @@ select {
     color: #fff;
     cursor: pointer;
 }
-/* Fine sezione select per scelta scala cromatica */
+
 
 
 /* slider */
