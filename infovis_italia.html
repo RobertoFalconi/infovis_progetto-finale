@@ -15,12 +15,12 @@
 <div id="header"> </div>
 <div id="tooltip" style="z-index: 1000;"></div>
 <!-- Grafico: bar plot -->
-<svg width="2000" height="400" style="position: absolute; top: 100px; left: 800px; z-index: 2;"></svg>
+<svg width="2000" height="400" style="position: absolute; top: 100px; left: 900px; z-index: 2;"></svg>
 <!-- Fine Grafico -->
 <!-- Mappa -->
 <svg width="700" height="750" id="italiasvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
 <!-- Fine Mappa -->
-<div style="position: absolute; top: 100px; left: 50px;"><button onclick="resetDefault()">Reset</button></div>
+<div style="position: absolute; top: 150px; left: 650px; z-index: 1500;"><button class="reset" onclick="resetDefault()">Reset</button></div>
 <!-- Inizio scala colore laterale -->
 <div class="container" style="top: 150px; left: 50px; z-index: 1;">
     <h4>Numero <br> alto di <br>incidenti</h4>
@@ -32,7 +32,7 @@
 </div>
 <!-- Fine scala colore laterale -->
 <!-- Slider temporale -->
-<div id="slider" style="position:absolute;top:900px;left:200px;width: 600px">
+<div id="slider" style="position:absolute;top:750px;left:860px;width: 600px; z-index: 2000">
     <div align="center">
         <input type="range" min="2003" max="2013" value="2013" class="slider" id="range">
         <p>Anno: <span id="valoreAnno"></span></p>
@@ -80,7 +80,7 @@
         </li>
     </ul>
 </div>
-<div class="container" style="top: 730px; left: 850px; width: 150px;">
+<div class="container" style="top: 440px; left: 1290px; width: 150px;">
     <h2>Seleziona tipo di strada</h2>
     <ul>
         <li>
@@ -102,7 +102,7 @@
 </div>
 <!-- Fine sezione bottoni/filtri -->
 <!-- Inizio sezione Cerchio con colore della regione -->
-<div class="tooltip" style="top: 120px; left: 600px;">
+<div class="tooltip" style="top: 120px; left: 600px; visibility: hidden;">
     <svg width="80" height="80">
         <circle cx="40" cy="40" r="38" fill="none" z-index="5"/>
     </svg>
@@ -374,7 +374,7 @@
                 .attr("class", "title")
                 .attr("font-size", "1.5em")
                 .attr("y", -20)
-                .attr("x", (width/2)-80)
+                .attr("x", (width/2)-300)
                 .text("- " + nomeRegione + " -");
 
             /* Realizzazione delle bar grafico 1*/
@@ -523,7 +523,7 @@
         .call(d3.axisLeft(y2));
 
         svg.selectAll(".title")
-            .attr("x", (width/2)-80)
+            .attr("x", (width/2)-300)
             .text("- " + NomeRegione + " -");
     }
 </script>
