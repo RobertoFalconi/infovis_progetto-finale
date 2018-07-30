@@ -97,17 +97,17 @@ Italy.updateToolTip = function(id, data, toolTip) {
         indexRegioneCliccata = data[d.id].i;
 
         barData = [{Tipology: "extra",Population: (regioneSelezionata.ve1t+regioneSelezionata.ve2t
-                +regioneSelezionata.ve3t+regioneSelezionata.ve4t+regioneSelezionata.pet), Color: "#0000ff"},
+                +regioneSelezionata.ve3t+regioneSelezionata.ve4t+regioneSelezionata.pet), Color: "#00ff00"},
             {Tipology: "urbane", Population: (regioneSelezionata.vu1t+regioneSelezionata.vu2t
-                    +regioneSelezionata.vu3t+regioneSelezionata.vu4t+regioneSelezionata.put), Color: "#ffff00"}
+                    +regioneSelezionata.vu3t+regioneSelezionata.vu4t+regioneSelezionata.put), Color: "#ff0"}
         ];
 
         barData2 = [{Tipology: "feriti", Population:  (regioneSelezionata.ve1f+regioneSelezionata.ve2f
                 +regioneSelezionata.ve3f+regioneSelezionata.ve4f+regioneSelezionata.pef+regioneSelezionata.vu1f
-                +regioneSelezionata.vu2f+regioneSelezionata.vu3f+regioneSelezionata.vu4f+regioneSelezionata.puf), Color: "#ffcccc"},
+                +regioneSelezionata.vu2f+regioneSelezionata.vu3f+regioneSelezionata.vu4f+regioneSelezionata.puf), Color: "#f00"},
             {Tipology: "morti", Population:  (regioneSelezionata.ve1m+regioneSelezionata.ve2m
                     +regioneSelezionata.ve3m+regioneSelezionata.ve4m+regioneSelezionata.pem+regioneSelezionata.vu1m
-                    +regioneSelezionata.vu2m+regioneSelezionata.vu3m+regioneSelezionata.vu4m+regioneSelezionata.pum), Color: "#663300"}
+                    +regioneSelezionata.vu2m+regioneSelezionata.vu3m+regioneSelezionata.vu4m+regioneSelezionata.pum), Color: "#00f"}
         ];
 
         /* Coloratura */

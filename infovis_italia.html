@@ -256,24 +256,24 @@
     function getIncidentiStradePerAnno() {
         if (indexRegioneCliccata !== -1) {
             var regioneCliccata = getRegioniByYear(annoSelezionato)[indexRegioneCliccata];
-            return [{Tipology: "Extra", Population: (regioneCliccata.ve1t+regioneCliccata.ve3t+regioneCliccata.ve2t+regioneCliccata.ve4t+regioneCliccata.pet), Color: "#ffcccc"},
-                {Tipology: "Urban", Population:  (regioneCliccata.vu1t+regioneCliccata.vu3t+regioneCliccata.vu2t+regioneCliccata.vu4t+regioneCliccata.put), Color: "#663300"}
+            return [{Tipology: "Extra", Population: (regioneCliccata.ve1t+regioneCliccata.ve3t+regioneCliccata.ve2t+regioneCliccata.ve4t+regioneCliccata.pet), Color: "#00ff00"},
+                {Tipology: "Urban", Population:  (regioneCliccata.vu1t+regioneCliccata.vu3t+regioneCliccata.vu2t+regioneCliccata.vu4t+regioneCliccata.put), Color: "#ffff00"}
             ];
         }  
-        return [{Tipology: "Extra", Population: (totalePerAnnoSelezionato.ve1t+totalePerAnnoSelezionato.ve3t+totalePerAnnoSelezionato.ve2t+totalePerAnnoSelezionato.ve4t+totalePerAnnoSelezionato.pet), Color: "#ffcccc"},
-            {Tipology: "Urban", Population:  (totalePerAnnoSelezionato.vu1t+totalePerAnnoSelezionato.vu3t+totalePerAnnoSelezionato.vu2t+totalePerAnnoSelezionato.vu4t+totalePerAnnoSelezionato.put), Color: "#663300"}
+        return [{Tipology: "Extra", Population: (totalePerAnnoSelezionato.ve1t+totalePerAnnoSelezionato.ve3t+totalePerAnnoSelezionato.ve2t+totalePerAnnoSelezionato.ve4t+totalePerAnnoSelezionato.pet), Color: "#0f0"},
+            {Tipology: "Urban", Population:  (totalePerAnnoSelezionato.vu1t+totalePerAnnoSelezionato.vu3t+totalePerAnnoSelezionato.vu2t+totalePerAnnoSelezionato.vu4t+totalePerAnnoSelezionato.put), Color: "#ff0"}
         ];
     }
     
     function getIncidentiMortiFeritiPerAnno() {
         if (indexRegioneCliccata !== -1) {
             var regioneCliccata = getRegioniByYear(annoSelezionato)[indexRegioneCliccata];
-            return [{Tipology: "Feriti", Population: (regioneCliccata.ve1f+regioneCliccata.ve3f+regioneCliccata.ve2f+regioneCliccata.ve4f+regioneCliccata.pef+regioneCliccata.vu1f+regioneCliccata.vu3f+regioneCliccata.vu2f+regioneCliccata.vu4f+regioneCliccata.puf), Color: "red"},
-                {Tipology: "Morti", Population: (regioneCliccata.ve1m+regioneCliccata.ve3m+regioneCliccata.ve2m+regioneCliccata.ve4m+regioneCliccata.pem+regioneCliccata.vu1m+regioneCliccata.vu3m+regioneCliccata.vu2m+regioneCliccata.vu4m+regioneCliccata.pum), Color: "red"}
+            return [{Tipology: "Feriti", Population: (regioneCliccata.ve1f+regioneCliccata.ve3f+regioneCliccata.ve2f+regioneCliccata.ve4f+regioneCliccata.pef+regioneCliccata.vu1f+regioneCliccata.vu3f+regioneCliccata.vu2f+regioneCliccata.vu4f+regioneCliccata.puf), Color: "#f00"},
+                {Tipology: "Morti", Population: (regioneCliccata.ve1m+regioneCliccata.ve3m+regioneCliccata.ve2m+regioneCliccata.ve4m+regioneCliccata.pem+regioneCliccata.vu1m+regioneCliccata.vu3m+regioneCliccata.vu2m+regioneCliccata.vu4m+regioneCliccata.pum), Color: "#00f"}
             ];
         } 
-        return [{Tipology: "Feriti", Population: (totalePerAnnoSelezionato.ve1f+totalePerAnnoSelezionato.ve3f+totalePerAnnoSelezionato.ve2f+totalePerAnnoSelezionato.ve4f+totalePerAnnoSelezionato.pef+totalePerAnnoSelezionato.vu1f+totalePerAnnoSelezionato.vu3f+totalePerAnnoSelezionato.vu2f+totalePerAnnoSelezionato.vu4f+totalePerAnnoSelezionato.puf), Color: "red"},
-            {Tipology: "Morti", Population: (totalePerAnnoSelezionato.ve1m+totalePerAnnoSelezionato.ve3m+totalePerAnnoSelezionato.ve2m+totalePerAnnoSelezionato.ve4m+totalePerAnnoSelezionato.pem+totalePerAnnoSelezionato.vu1m+totalePerAnnoSelezionato.vu3m+totalePerAnnoSelezionato.vu2m+totalePerAnnoSelezionato.vu4m+totalePerAnnoSelezionato.pum), Color: "red"}
+        return [{Tipology: "Feriti", Population: (totalePerAnnoSelezionato.ve1f+totalePerAnnoSelezionato.ve3f+totalePerAnnoSelezionato.ve2f+totalePerAnnoSelezionato.ve4f+totalePerAnnoSelezionato.pef+totalePerAnnoSelezionato.vu1f+totalePerAnnoSelezionato.vu3f+totalePerAnnoSelezionato.vu2f+totalePerAnnoSelezionato.vu4f+totalePerAnnoSelezionato.puf), Color: "#f00"},
+            {Tipology: "Morti", Population: (totalePerAnnoSelezionato.ve1m+totalePerAnnoSelezionato.ve3m+totalePerAnnoSelezionato.ve2m+totalePerAnnoSelezionato.ve4m+totalePerAnnoSelezionato.pem+totalePerAnnoSelezionato.vu1m+totalePerAnnoSelezionato.vu3m+totalePerAnnoSelezionato.vu2m+totalePerAnnoSelezionato.vu4m+totalePerAnnoSelezionato.pum), Color: "#00f"}
         ];
     }
 
