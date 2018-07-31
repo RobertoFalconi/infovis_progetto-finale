@@ -164,7 +164,7 @@
             "<tr><td> - </td><td>" + selezione3 + "</td></tr>" +
             "<tr><td>Patentanti:</td><td>" + (d.patentati) + "</td></tr>" +
             "<tr><td>Incidenti:</td><td>" + (d.incidenti) + "</td></tr>" +
-            "<tr><td>Incidenti/Patentanti:</td><td>" + ((d.rapporto)*100).roundTo(2) + "%" + "</td></tr>" +
+            "<tr><td>Incidenti/Patentanti:</td><td>" + decimals((d.rapporto)*100) + "%" + "</td></tr>" +
             "</table>";
     }
     
@@ -238,6 +238,11 @@
 
     d3.select(self.frameElement).style("height", "600px");
 
+    function decimals(number) {
+    if(number>1) return number.roundTo(3);
+    else return number.roundTo(4);
+    } 
+
     /* Arrotonda i numeri a x cifre decimali */
     function roundTo(posizioneDecimale){
         var i = this * Math.pow(10, posizioneDecimale);
@@ -247,7 +252,7 @@
     Number.prototype.roundTo = roundTo;
 
     function resetDefault() {
-        location.reload();
+        window.location.reload(true);
     }
 </script>
 <script>
