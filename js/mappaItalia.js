@@ -127,7 +127,7 @@ Italy.updateToolTip = function(id, data, toolTip) {
             .style("stroke-opacity", 0.8)
             .style("fill", data[d.id].color),
 
-            updateBarChart(barData, barData2, d.n + ", anno " + data[d.id].annoSelezionato)
+            updateBarChart(barData, barData2, d.n + ", year " + data[d.id].annoSelezionato)
     }
 
     /* Gestisce mouseclick del cerchio colorato*/
