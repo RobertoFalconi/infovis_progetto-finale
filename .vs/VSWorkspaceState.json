@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\css",
+    "\\plugins\\Bootstrap\\css",
+    "\\plugins\\Bootstrap\\js"
   ],
   "SelectedNode": "\\infovis_italia.html",
   "PreviewInSolutionExplorer": false
