@@ -1,9 +1,20 @@
 import csv
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
 Input="dataset/dataset.csv"
-OUTPUT="datasetRegioni.js"
+OUTPUT="js/datasetRegioni.js"
 f = open(Input, 'r')
 reader = csv.reader(f)
+
+df = pd.read_csv('dataset/dataset.csv', encoding="utf-8")
+df = df.drop('Regioni', axis=1).reset_index(drop=True)
+X = df.values
+scaler = StandardScaler().fit_transform(X)
+pca = PCA(n_components=2)
+principalComponents = pca.fit_transform(scaler)
+
 lista = []
 for row in reader:
     lista.append(row)
