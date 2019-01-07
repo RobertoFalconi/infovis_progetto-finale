@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
+from sklearn.decomposition import PCA
 import plotly.graph_objs as go
 
 app = dash.Dash()
@@ -10,6 +11,13 @@ app = dash.Dash()
 #    'https://raw.githubusercontent.com/plotly/datasets/master/1962_2006_walmart_store_openings.csv')
 
 df = pd.read_csv('AccessPoint.csv')
+
+features = ['sepal length', 'sepal width', 'petal length', 'petal width']
+x = df.loc[:, features].values
+x = StandardScaler().fit_transform(x)
+pca = PCA(n_components=2)
+principalComponents = pca.fit_transform(x)
+
 
 app.layout = html.Div([
     html.H1('Acccess Point Roma'),

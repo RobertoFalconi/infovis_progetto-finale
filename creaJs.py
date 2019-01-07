@@ -1,5 +1,6 @@
 import csv
-Input="dataset.csv"
+
+Input="dataset/dataset.csv"
 OUTPUT="datasetRegioni.js"
 f = open(Input, 'r')
 reader = csv.reader(f)
