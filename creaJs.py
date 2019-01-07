@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
 Input="dataset/dataset.csv"
-OUTPUT="js/datasetRegioni.js"
+OUTPUT="datasetRegioni.js"
 f = open(Input, 'r')
 reader = csv.reader(f)
 
@@ -20,7 +20,7 @@ for row in reader:
     lista.append(row)
 lista.pop(0)
 f2 = open(OUTPUT, 'w')
-app=[]
+app=[] 
 cont=0
 for i in lista:
     if (i[0].find("Italia")==-1):
