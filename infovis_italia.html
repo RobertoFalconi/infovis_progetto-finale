@@ -22,7 +22,7 @@
     <svg width="450" height="400" style="position: absolute; top: 100px; left: 900px; z-index: 2;"></svg>
     <!-- Fine Grafico -->
     <!-- Inizio PCA -->
-    <img src="plots\pca2013.png" style="position: absolute; top: 100px; left: 1500px; z-index: 2;">
+    <img id="grafico" src="plots\pca2013.png" style="position: absolute; top: 100px; left: 1500px; z-index: 2;">
     <img src="plots\pcalegend.png" style="position: absolute; top: 100px; left: 2150px; z-index: 2;">
     <!-- Fine PCA -->
     <!-- Mappa -->
@@ -147,6 +147,11 @@
             updateBarChart(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", year " + annoSelezionato)
         };
         var annoSelezionato = slider.value;
+
+        slider.onchange = function () {
+            var image = document.getElementById("grafico");
+            image.src = "plots\\pca" + slider.value + ".png";
+        }
 
         /* Tooltip */
         function tooltipHtml(n, d) {
