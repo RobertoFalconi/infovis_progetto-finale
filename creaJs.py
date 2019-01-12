@@ -1,14 +1,26 @@
 import csv
-Input="dataset.csv"
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+Input="dataset/dataset.csv"
 OUTPUT="datasetRegioni.js"
 f = open(Input, 'r')
 reader = csv.reader(f)
+
+df = pd.read_csv('dataset/dataset.csv', encoding="utf-8")
+df = df.drop('Regioni', axis=1).reset_index(drop=True)
+X = df.values
+scaler = StandardScaler().fit_transform(X)
+pca = PCA(n_components=2)
+principalComponents = pca.fit_transform(scaler)
+
 lista = []
 for row in reader:
     lista.append(row)
 lista.pop(0)
 f2 = open(OUTPUT, 'w')
-app=[]
+app=[] 
 cont=0
 for i in lista:
     if (i[0].find("Italia")==-1):

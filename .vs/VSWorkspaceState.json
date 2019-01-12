@@ -2,8 +2,13 @@
   "ExpandedNodes": [
     "",
     "\\css",
-    "\\js"
+    "\\dataset",
+    "\\imm",
+    "\\js",
+    "\\plugins",
+    "\\screen",
+    "\\test-python"
   ],
-  "SelectedNode": "\\infovis_italia.html",
+  "SelectedNode": "\\creaJs.py",
   "PreviewInSolutionExplorer": false
 }

@@ -1,8 +1,11 @@
 ﻿<!DOCTYPE html>
-<html >
+<html>
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Visual Analytics Project</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/mappaItalia.js"></script> <!-- Paths della mappa dell'Italia -->
@@ -12,525 +15,536 @@
 </head>
 
 <body>
-<div id="header"> </div>
-<div id="tooltip" style="z-index: 1000;"></div>
-<!-- Grafico: bar plot -->
-<svg width="2000" height="400" style="position: absolute; top: 100px; left: 900px; z-index: 2;"></svg>
-<!-- Fine Grafico -->
-<!-- Mappa -->
-<svg width="700" height="750" id="italiasvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
-<!-- Fine Mappa -->
-<div style="position: absolute; top: 150px; left: 650px; z-index: 100;"><button class="reset" onclick="resetDefault()">Reset</button></div>
-<!-- Inizio scala colore laterale -->
-<div class="container" style="top: 150px; left: 50px; z-index: 1;">
-    <h4>High <br> rate <br>of accidents</h4>
-    <div class="tooltip">
-        <img src="imm/green.png" alt="scala colori utilizzata" id="imgScale" border=2 height="450px" width="50px">
-        <span class="tooltiptext">Color scale with shades based on the number of accidents filtered.</span>
-    </div>
-    <h4>Low <br> rate <br>of accidents</h4>
-</div>
-<!-- Fine scala colore laterale -->
-<!-- Slider temporale -->
-<div id="slider" style="position:absolute;top:750px;left:860px;width: 600px; z-index: 2000">
-    <div align="center">
-        <input type="range" min="2003" max="2013" value="2013" class="slider" id="range" style="z-index: -1000;">
-        <p>Year: <span id="valoreAnno"></span></p>
-    </div>
-</div>
-<!-- Fine Slider temporale -->
-<!-- Inizio sezione bottoni/filtri -->
-<div class="container" style="top: 440px; left: 1070px; width: 170px;">
-    <h2>Severity</h2>
-    <ul>
-        <li>
-            <input type="radio" id="at-option" name="selector-severity" checked="checked" onclick="updateFiltroGravita('all')">
-            <label for="at-option">All</label>
-            <div class="check"></div>
-        </li>
-        <li>
-            <input type="radio" id="f-option" name="selector-severity" onclick="updateFiltroGravita('injured')">
-            <label for="f-option">Only injureds</label>
-            <div class="check"><div class="inside"></div></div>
-        </li>
-        <li>
-            <input type="radio" id="m-option" name="selector-severity" onclick="updateFiltroGravita('dead')">
-            <label for="m-option">At least a dead</label>
-            <div class="check"><div class="inside"></div></div>
-        </li>
-    </ul>
-</div>
-<div class="container" style="top: 440px; left: 850px; width: 150px;">
-    <h2>Actors</h2>
-    <ul>
-        <li>
-            <input type="radio" id="a-option" name="selector-type"  checked="checked" onclick="updateFiltroTipologia('all')">
-            <label for="a-option">All</label>
-            <div class="check"></div>
-        </li>
-        <li>
-            <input type="radio" id="v-option" name="selector-type" onclick="updateFiltroTipologia('cars')">
-            <label for="v-option">Only vehicles</label>
-            <div class="check"></div>
-        </li>
-        <li>
-            <input type="radio" id="p-option" name="selector-type" onclick="updateFiltroTipologia('pedestrians')">
-            <label for="p-option">At least a pedestrian</label>
-            <div class="check"><div class="inside"></div></div>
-        </li>
-    </ul>
-</div>
-<div class="container" style="top: 440px; left: 1290px; width: 150px;">
-    <h2>Road</h2>
-    <ul>
-        <li>
-            <input type="radio" id="t-option" name="selector-street" checked="checked" onclick="updateFiltroStrada('all')">
-            <label for="t-option">All</label>
-            <div class="check"></div>
-        </li>
-        <li>
-            <input type="radio" id="u-option" name="selector-street" onclick="updateFiltroStrada('urban')">
-            <label for="u-option">Urban</label>
-            <div class="check"></div>
-        </li>
-        <li>
-            <input type="radio" id="e-option" name="selector-street" onclick="updateFiltroStrada('interurban')">
-            <label for="e-option">Extraurban</label>
-            <div class="check"><div class="inside"></div></div>
-        </li>
-    </ul>
-</div>
-<!-- Fine sezione bottoni/filtri -->
-<!-- Inizio sezione Cerchio con colore della regione -->
-<div class="tooltip" style="top: 120px; left: 600px; visibility: hidden;">
-    <svg width="80" height="80">
-        <circle cx="40" cy="40" r="38" fill="none" z-index="5"/>
-    </svg>
-</div>
+
+        <div id="header"> </div>
+        <div id="tooltip" style="z-index: 1000;"></div>
+        <!-- Grafico: bar plot -->
+        <svg width="450" height="400" style="position: absolute; top: 100px; left: 900px; z-index: 2;"></svg>
+        <!-- Fine Grafico -->
+        <!-- Mappa -->
+        <svg width="700" height="750" id="italiasvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
+        <!-- Fine Mappa -->
+        <div style="position: absolute; top: 150px; left: 650px; z-index: 100;"><button class="reset" onclick="resetDefault()">Reset</button></div>
+        <!-- Inizio scala colore laterale -->
+        <div class="container" style="top: 150px; left: 50px; z-index: 1;">
+            <h4>High <br> rate <br>of accidents</h4>
+            <div class="tooltip">
+                <img src="imm/green.png" alt="scala colori utilizzata" id="imgScale" border=2 height="450 px" width="50px">
+                <span class="tooltiptext">Color scale with shades based on the number of accidents filtered.</span>
+            </div>
+            <h4>Low <br> rate <br>of accidents</h4>
+        </div>
+        <!-- Fine scala colore laterale -->
+        <!-- Slider temporale -->
+        <div id="slider" style="position:absolute;top:750px;left:860px;width: 600px; z-index: 2000">
+            <div align="center">
+                <input type="range" min="2003" max="2013" value="2013" class="slider" id="range" style="z-index: -1000;">
+                <p>Year: <span id="valoreAnno"></span></p>
+            </div>
+        </div>
+        <!-- Fine Slider temporale -->
+        <!-- Inizio sezione bottoni/filtri -->
+        <div class="container" style="top: 440px; left: 1070px; width: 170px;">
+            <h2>Severity</h2>
+            <ul>
+                <li>
+                    <input type="radio" id="at-option" name="selector-severity" checked="checked" onclick="updateFiltroGravita('all')">
+                    <label for="at-option">All</label>
+                    <div class="check"></div>
+                </li>
+                <li>
+                    <input type="radio" id="f-option" name="selector-severity" onclick="updateFiltroGravita('injured')">
+                    <label for="f-option">Only injureds</label>
+                    <div class="check"><div class="inside"></div></div>
+                </li>
+                <li>
+                    <input type="radio" id="m-option" name="selector-severity" onclick="updateFiltroGravita('dead')">
+                    <label for="m-option">At least a dead</label>
+                    <div class="check"><div class="inside"></div></div>
+                </li>
+            </ul>
+        </div>
+        <div class="container" style="top: 440px; left: 850px; width: 150px;">
+            <h2>Actors</h2>
+            <ul>
+                <li>
+                    <input type="radio" id="a-option" name="selector-type" checked="checked" onclick="updateFiltroTipologia('all')">
+                    <label for="a-option">All</label>
+                    <div class="check"></div>
+                </li>
+                <li>
+                    <input type="radio" id="v-option" name="selector-type" onclick="updateFiltroTipologia('cars')">
+                    <label for="v-option">Only vehicles</label>
+                    <div class="check"></div>
+                </li>
+                <li>
+                    <input type="radio" id="p-option" name="selector-type" onclick="updateFiltroTipologia('pedestrians')">
+                    <label for="p-option">At least a pedestrian</label>
+                    <div class="check"><div class="inside"></div></div>
+                </li>
+            </ul>
+        </div>
+        <div class="container" style="top: 440px; left: 1290px; width: 150px;">
+            <h2>Road</h2>
+            <ul>
+                <li>
+                    <input type="radio" id="t-option" name="selector-street" checked="checked" onclick="updateFiltroStrada('all')">
+                    <label for="t-option">All</label>
+                    <div class="check"></div>
+                </li>
+                <li>
+                    <input type="radio" id="u-option" name="selector-street" onclick="updateFiltroStrada('urban')">
+                    <label for="u-option">Urban</label>
+                    <div class="check"></div>
+                </li>
+                <li>
+                    <input type="radio" id="e-option" name="selector-street" onclick="updateFiltroStrada('interurban')">
+                    <label for="e-option">Extraurban</label>
+                    <div class="check"><div class="inside"></div></div>
+                </li>
+            </ul>
+        </div>
+        <!-- Fine sezione bottoni/filtri -->
+        <!-- Inizio sezione Cerchio con colore della regione -->
+        <div class="tooltip" style="top: 120px; left: 600px; visibility: hidden;">
+            <svg width="80" height="80">
+                <circle cx="40" cy="40" r="38" fill="none" z-index="5" />
+            </svg>
+        </div>
 
 
-<script>
-    /* Intestazione in alto */
-    const header = d3.select('#header');
-    const instructions = header.append('div').attr('id', 'instructions').append('div');
-    instructions.append('p').text('Italian traffic collisions and accidents');
+        <script>
+            /* Intestazione in alto */
+            const header = d3.select('#header');
+            const instructions = header.append('div').attr('id', 'instructions').append('div');
+            instructions.append('p').text('Italian traffic collisions and accidents');
 
-    function getIntestazioneBarChart() {
-        if (indexRegioneCliccata !== -1) {
-            var identificativo=getRegioniByYear(annoSelezionato)[indexRegioneCliccata].id;
-            for (i in pathRegioni){
-                if (pathRegioni[i].id==identificativo){
-                    return pathRegioni[i].n;
+            function getIntestazioneBarChart() {
+                if (indexRegioneCliccata !== -1) {
+                    var identificativo = getRegioniByYear(annoSelezionato)[indexRegioneCliccata].id;
+                    for (i in pathRegioni) {
+                        if (pathRegioni[i].id == identificativo) {
+                            return pathRegioni[i].n;
+                        }
+                    }
+
+                }
+                return "Total in Italy";
+            }
+            /* Slider */
+            var slider = document.getElementById("range");
+            var output = document.getElementById("valoreAnno");
+            output.innerHTML = slider.value;
+            slider.oninput = function () {
+                output.innerHTML = this.value;
+                annoSelezionato = this.value;
+                updateMap();
+                updateBarChart(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", year " + annoSelezionato)
+            };
+            var annoSelezionato = slider.value;
+
+            /* Tooltip */
+            function tooltipHtml(n, d) {
+                var selezione1;
+                var selezione2;
+                var selezione3;
+
+                if (Filtro1 === "all") selezione1 = "Vehicles and pedestrian";
+                else if (Filtro1 === "cars") selezione1 = "Only vehicles";
+                else if (Filtro1 === "pedestrians") selezione1 = "At least a pedestrian";
+
+                if (Filtro2 === "all") selezione2 = "Urban and extraurban";
+                else if (Filtro2 === "urban") selezione2 = "Urban";
+                else if (Filtro2 === "interurban") selezione2 = "Extraurban";
+
+                if (Filtro3 === "all") selezione3 = "Injureds and deads";
+                else if (Filtro3 === "injured") selezione3 = "Only injureds";
+                else if (Filtro3 === "dead") selezione3 = "At least a dead";
+
+                return "<h4 style='color:red'>" + n + "</h4><table>" +
+                    "<tr><td>Year:</td><td>" + annoSelezionato + "</td></tr>" +
+                    "<tr><td>Filters:</td><td>" + selezione1 + "</td></tr>" +
+                    "<tr><td> - </td><td>" + selezione2 + "</td></tr>" +
+                    "<tr><td> - </td><td>" + selezione3 + "</td></tr>" +
+                    "<tr><td>Licensed:</td><td>" + (d.patentati) + "</td></tr>" +
+                    "<tr><td>Accidents:</td><td>" + (d.incidenti) + "</td></tr>" +
+                    "<tr><td>Accidents/Licensed:</td><td>" + decimals((d.rapporto) * 100) + "%" + "</td></tr>" +
+                    "</table>";
+            }
+
+            var totalePerAnnoSelezionato = getTotaleByYear(annoSelezionato);
+
+            function viewMap() {
+                var sampleData = {};
+                var i;
+                var codiceColore;
+                var regioni = getRegioniByYear(annoSelezionato);
+                totalePerAnnoSelezionato = getTotaleByYear(annoSelezionato);
+                rapporti_reg = rapportiRegioni(regioni, Filtro1, Filtro2, Filtro3);
+                rapportoMax = Math.max.apply(null, rapporti_reg);
+                for (i in regioni) {
+                    incidentiPatentati = incidentiPatentatiFiltro(Filtro1, Filtro2, Filtro3, i);
+                    patentati = incidentiPatentati.patentati;
+                    incidenti = incidentiPatentati.incidenti;
+                    rapporto = incidenti / patentati;
+                    percentuale_norm = rapporto / rapportoMax;
+                    codiceColore = d3.interpolateYlGn(percentuale_norm);
+                    // solo il colore serve allo script di disegno mappa
+                    var regione = regioni[i];
+                    sampleData[regioni[i].id] = { patentati, incidenti, rapporto, percentuale_norm, regione, i, annoSelezionato, color: codiceColore };
+
+                }
+                /* Disegno delle regioni */
+                Italy.draw("#italiasvg", sampleData);
+                Italy.updateToolTip("#italiasvg", sampleData, tooltipHtml)
+            }
+
+
+            function updateMap() {
+                var sampleData = {};
+                var i;
+                var codiceColore;
+                var regioni = getRegioniByYear(annoSelezionato);
+                totalePerAnnoSelezionato = getTotaleByYear(annoSelezionato);
+                rapporti_reg = rapportiRegioni(regioni, Filtro1, Filtro2, Filtro3);
+                rapportoMax = Math.max.apply(null, rapporti_reg);
+                for (i in regioni) {
+                    incidentiPatentati = incidentiPatentatiFiltro(Filtro1, Filtro2, Filtro3, i);
+                    patentati = incidentiPatentati.patentati;
+                    incidenti = incidentiPatentati.incidenti;
+                    rapporto = incidenti / patentati;
+                    percentuale_norm = rapporto / rapportoMax;
+                    codiceColore = d3.interpolateYlGn(percentuale_norm);
+                    var regione = regioni[i];
+                    sampleData[regioni[i].id] = { patentati, incidenti, rapporto, percentuale_norm, regione, i, annoSelezionato, color: codiceColore };
+
+                }
+                Italy.update("#italiasvg", sampleData);
+                Italy.updateToolTip("#italiasvg", sampleData, tooltipHtml)
+            }
+
+            /* Aggiorna filtri */
+            function updateFiltroTipologia(filtro) {
+                Filtro1 = filtro;
+                updateMap();
+            }
+            function updateFiltroStrada(filtro) {
+                Filtro2 = filtro;
+                updateMap();
+            }
+            function updateFiltroGravita(filtro) {
+                Filtro3 = filtro;
+                updateMap();
+            }
+
+            /* Disegna la prima volta la mappa con impostazione di default "tutta la popolazione" */
+            viewMap();
+
+            d3.select(self.frameElement).style("height", "600px");
+
+            function decimals(number) {
+                if (number > 1) return number.roundTo(3);
+                else return number.roundTo(4);
+            }
+
+            /* Arrotonda i numeri a x cifre decimali */
+            function roundTo(posizioneDecimale) {
+                var i = this * Math.pow(10, posizioneDecimale);
+                i = Math.round(i);
+                return i / Math.pow(10, posizioneDecimale);
+            }
+            Number.prototype.roundTo = roundTo;
+
+            function resetDefault() {
+                window.location.reload(true);
+            }
+        </script>
+        <script>
+
+
+            function getIncidentiStradePerAnno() {
+                if (indexRegioneCliccata !== -1) {
+                    var regioneCliccata = getRegioniByYear(annoSelezionato)[indexRegioneCliccata];
+                    return [{ Tipology: "Extra", Population: (regioneCliccata.ve1t + regioneCliccata.ve3t + regioneCliccata.ve2t + regioneCliccata.ve4t + regioneCliccata.pet), Color: "#00ff00" },
+                    { Tipology: "Urban", Population: (regioneCliccata.vu1t + regioneCliccata.vu3t + regioneCliccata.vu2t + regioneCliccata.vu4t + regioneCliccata.put), Color: "#ffff00" }
+                    ];
+                }
+                return [{ Tipology: "Extra", Population: (totalePerAnnoSelezionato.ve1t + totalePerAnnoSelezionato.ve3t + totalePerAnnoSelezionato.ve2t + totalePerAnnoSelezionato.ve4t + totalePerAnnoSelezionato.pet), Color: "#0f0" },
+                { Tipology: "Urban", Population: (totalePerAnnoSelezionato.vu1t + totalePerAnnoSelezionato.vu3t + totalePerAnnoSelezionato.vu2t + totalePerAnnoSelezionato.vu4t + totalePerAnnoSelezionato.put), Color: "#ff0" }
+                ];
+            }
+
+            function getIncidentiMortiFeritiPerAnno() {
+                if (indexRegioneCliccata !== -1) {
+                    var regioneCliccata = getRegioniByYear(annoSelezionato)[indexRegioneCliccata];
+                    return [{ Tipology: "Deads", Population: (regioneCliccata.ve1f + regioneCliccata.ve3f + regioneCliccata.ve2f + regioneCliccata.ve4f + regioneCliccata.pef + regioneCliccata.vu1f + regioneCliccata.vu3f + regioneCliccata.vu2f + regioneCliccata.vu4f + regioneCliccata.puf), Color: "#f00" },
+                    { Tipology: "Injureds", Population: (regioneCliccata.ve1m + regioneCliccata.ve3m + regioneCliccata.ve2m + regioneCliccata.ve4m + regioneCliccata.pem + regioneCliccata.vu1m + regioneCliccata.vu3m + regioneCliccata.vu2m + regioneCliccata.vu4m + regioneCliccata.pum), Color: "#00f" }
+                    ];
+                }
+                return [{ Tipology: "Deads", Population: (totalePerAnnoSelezionato.ve1f + totalePerAnnoSelezionato.ve3f + totalePerAnnoSelezionato.ve2f + totalePerAnnoSelezionato.ve4f + totalePerAnnoSelezionato.pef + totalePerAnnoSelezionato.vu1f + totalePerAnnoSelezionato.vu3f + totalePerAnnoSelezionato.vu2f + totalePerAnnoSelezionato.vu4f + totalePerAnnoSelezionato.puf), Color: "#f00" },
+                { Tipology: "Injureds", Population: (totalePerAnnoSelezionato.ve1m + totalePerAnnoSelezionato.ve3m + totalePerAnnoSelezionato.ve2m + totalePerAnnoSelezionato.ve4m + totalePerAnnoSelezionato.pem + totalePerAnnoSelezionato.vu1m + totalePerAnnoSelezionato.vu3m + totalePerAnnoSelezionato.vu2m + totalePerAnnoSelezionato.vu4m + totalePerAnnoSelezionato.pum), Color: "#00f" }
+                ];
+            }
+
+            barData_default = getIncidentiStradePerAnno();
+
+            barData2_default = getIncidentiMortiFeritiPerAnno();
+
+            /* Preparazione dell'area adibita ai BarCharts */
+            var svg = d3.select("svg"),
+                margin = {
+                    top: 50,
+                    right: 50,
+                    bottom: 30,
+                    left: 80
+                },
+                width = 610,
+                height = 230,
+                g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var x = d3.scaleBand()
+                .rangeRound([0, width * 0.2])
+                .padding(0.3);
+
+            var y = d3.scaleLinear()
+                .rangeRound([height, 0]);
+
+            var svg2 = d3.select("svg"),
+                margin2 = {
+                    top: 50,
+                    right: 50,
+                    bottom: 30,
+                    left: 80
+                },
+                width2 = width,
+                height2 = 230,
+                g2 = svg2.append("g").attr("transform", "translate(" + (height2 + 70) + "," + margin2.top + ")");
+
+            var x2 = d3.scaleBand()
+                .rangeRound([0, width2 * 0.2])
+                .padding(0.3);
+
+            var y2 = d3.scaleLinear()
+                .rangeRound([height2, 0]);
+
+
+            /* Disegna la prima volta il Bar Chart con i dati dell'Italia e  l'anno di default */
+            function showBar(data, data2, nomeRegione) {
+                {
+                    x.domain(data.map(function (d) {
+                        return d.Tipology;
+                    }));
+
+                    x2.domain(data2.map(function (d) {
+                        return d.Tipology;
+                    }));
+
+                    var maxBar1, maxBar2;
+
+                    /* Per l'asse y prendo il valore massimo tra i tipi di dato */
+                    if (data[0].Population > data[1].Population) {
+                        maxBar1 = data[0].Population;
+                    }
+                    else {
+                        maxBar1 = data[1].Population;
+                    }
+
+                    if (data2[0].Population > data2[1].Population) {
+                        maxBar2 = data2[0].Population;
+                    }
+                    else {
+                        maxBar2 = data2[1].Population;
+                    }
+
+                    y.domain([0, maxBar1]);
+
+                    y2.domain([0, maxBar2]);
+
+                    /*Grafico 1 Strade urbane ed extra urbane*/
+
+                    /* X grafico 1 */
+                    g.append("g")
+                        .attr("class", "asseX")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(d3.axisBottom(x));
+
+                    /* Y grafico 1 */
+                    g.append("g")
+                        .attr("class", "asseY")
+                        .call(d3.axisLeft(y))
+                        .append("text")
+                        .attr("fill", "#000")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", -30)
+                        .attr("font-size", "1.5em")
+                        .attr("dy", -30)
+                        .attr("text-anchor", "end")
+                        .text("Urban and extraurban roads");
+
+                    /* Titolo */
+                    g.append("g")
+                        .append("text")
+                        .attr("class", "title")
+                        .attr("font-size", "1.5em")
+                        .attr("y", -20)
+                        .attr("x", (width / 2) - 300)
+                        .text("- " + nomeRegione + " -");
+
+                    /* Realizzazione delle bar grafico 1*/
+                    g.selectAll(".bar")
+                        .data(data)
+                        .enter().append("rect")
+                        .attr("class", "bar")
+                        .style("stroke", "black")
+                        .style("stroke-width", 2)
+                        .style("fill", function (d) { return d.Color; })
+                        .style("fill-opacity", 0.6)
+                        .attr("x", function (d) {
+                            return x(d.Tipology);
+                        })
+                        .attr("y", function (d) {
+                            return y(Number(d.Population));
+                        })
+                        .attr("width", x.bandwidth())
+                        .attr("height", function (d) {
+                            return height - y(Number(d.Population));
+                        });
+
+                    /*Grafico 2 incidenti e feriti*/
+
+                    /* X grafico 2 */
+                    g2.append("g")
+                        .attr("class", "asseX")
+                        .attr("transform", "translate(0," + height2 + ")")
+                        .call(d3.axisBottom(x2));
+
+                    /* Y grafico 2 */
+                    g2.append("g")
+                        .attr("class", "asseY2")
+                        .call(d3.axisLeft(y2))
+                        .append("text")
+                        .attr("fill", "#000")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", -30)
+                        .attr("font-size", "1.5em")
+                        .attr("dy", -30)
+                        .attr("text-anchor", "end")
+                        .text("Injureds and deads");
+
+                    /* Realizzazione delle bar grafico 2 */
+                    g2.selectAll(".bar2")
+                        .data(data2)
+                        .enter().append("rect")
+                        .attr("class", "bar2")
+                        .style("stroke", "black")
+                        .style("stroke-width", 2)
+                        .style("fill", function (d) { return d.Color; })
+                        .style("fill-opacity", 0.6)
+                        .attr("x", function (d) {
+                            return x2(d.Tipology);
+                        })
+                        .attr("y", function (d) {
+                            return y2(Number(d.Population));
+                        })
+                        .attr("width", x2.bandwidth())
+                        .attr("height", function (d) {
+                            return height2 - y2(Number(d.Population));
+                        });
+
+
                 }
             }
 
-        }
-        return "Total in Italy";
-    }
-    /* Slider */
-    var slider = document.getElementById("range");
-    var output = document.getElementById("valoreAnno");
-    output.innerHTML = slider.value;
-    slider.oninput = function() {
-        output.innerHTML = this.value;
-        annoSelezionato = this.value;
-        updateMap();
-        updateBarChart(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", year " + annoSelezionato)
-    };
-    var annoSelezionato = slider.value;
+            /* Di default si visualizza il totale di incidenti e vittime per l'anno selezionato */
+            showBar(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", year " + annoSelezionato);
+            /* Aggiornamento dati Bar Chart */
+            function updateBarChart(data, data2, NomeRegione) {
+                x.domain(data.map(function (d) {
+                    return d.Tipology;
+                }));
 
-    /* Tooltip */
-    function tooltipHtml(n, d) {
-        var selezione1;
-        var selezione2;
-        var selezione3;
+                x2.domain(data2.map(function (d) {
+                    return d.Tipology;
+                }));
 
-        if (Filtro1 === "all") selezione1 = "Vehicles and pedestrian";
-        else if (Filtro1 === "cars") selezione1 = "Only vehicles";
-        else if (Filtro1 === "pedestrians") selezione1 = "At least a pedestrian";
+                var maxBar1, maxBar2;
 
-        if (Filtro2 === "all") selezione2 = "Urban and extraurban";
-        else if (Filtro2 === "urban") selezione2 = "Urban";
-        else if (Filtro2 === "interurban") selezione2 = "Extraurban";
+                /* Per l'asse y prendo il valore massimo tra i tipi di dato */
+                if (data[0].Population > data[1].Population) {
+                    maxBar1 = data[0].Population;
+                }
+                else {
+                    maxBar1 = data[1].Population;
+                }
 
-        if (Filtro3 === "all") selezione3 = "Injureds and deads";
-        else if (Filtro3 === "injured") selezione3 = "Only injureds";
-        else if (Filtro3 === "dead") selezione3 = "At least a dead";
+                if (data2[0].Population > data2[1].Population) {
+                    maxBar2 = data2[0].Population;
+                }
+                else {
+                    maxBar2 = data2[1].Population;
+                }
 
-        return "<h4 style='color:red'>" + n + "</h4><table>" +
-            "<tr><td>Year:</td><td>" + annoSelezionato + "</td></tr>" +
-            "<tr><td>Filters:</td><td>" + selezione1 + "</td></tr>" +
-            "<tr><td> - </td><td>" + selezione2 + "</td></tr>" +
-            "<tr><td> - </td><td>" + selezione3 + "</td></tr>" +
-            "<tr><td>Licensed:</td><td>" + (d.patentati) + "</td></tr>" +
-            "<tr><td>Accidents:</td><td>" + (d.incidenti) + "</td></tr>" +
-            "<tr><td>Accidents/Licensed:</td><td>" + decimals((d.rapporto)*100) + "%" + "</td></tr>" +
-            "</table>";
-    }
-    
-    var totalePerAnnoSelezionato = getTotaleByYear(annoSelezionato);
+                y.domain([0, maxBar1]);
 
-    function viewMap() {
-        var sampleData = {};
-        var i;
-        var codiceColore;
-        var regioni = getRegioniByYear(annoSelezionato);
-        totalePerAnnoSelezionato = getTotaleByYear(annoSelezionato);
-        rapporti_reg = rapportiRegioni(regioni, Filtro1, Filtro2, Filtro3);
-        rapportoMax = Math.max.apply(null, rapporti_reg);
-        for (i in regioni) {
-            incidentiPatentati = incidentiPatentatiFiltro(Filtro1, Filtro2, Filtro3, i);
-            patentati = incidentiPatentati.patentati;
-            incidenti = incidentiPatentati.incidenti;
-            rapporto = incidenti/patentati;
-            percentuale_norm = rapporto/rapportoMax;
-            codiceColore = d3.interpolateYlGn(percentuale_norm);
-            // solo il colore serve allo script di disegno mappa
-            var regione = regioni[i];
-            sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, regione, i, annoSelezionato, color:codiceColore};
-
-        }
-        /* Disegno delle regioni */
-        Italy.draw("#italiasvg", sampleData);
-        Italy.updateToolTip("#italiasvg", sampleData, tooltipHtml)
-    }
-    
-
-    function updateMap() {
-        var sampleData = {};
-        var i;
-        var codiceColore;
-        var regioni = getRegioniByYear(annoSelezionato);
-        totalePerAnnoSelezionato = getTotaleByYear(annoSelezionato);
-        rapporti_reg = rapportiRegioni(regioni, Filtro1, Filtro2, Filtro3);
-        rapportoMax = Math.max.apply(null, rapporti_reg);
-        for (i in regioni) {
-            incidentiPatentati = incidentiPatentatiFiltro(Filtro1, Filtro2, Filtro3, i);
-            patentati = incidentiPatentati.patentati;
-            incidenti = incidentiPatentati.incidenti;
-            rapporto = incidenti/patentati;
-            percentuale_norm = rapporto/rapportoMax;
-            codiceColore = d3.interpolateYlGn(percentuale_norm);
-            var regione = regioni[i];
-            sampleData[regioni[i].id]={patentati, incidenti, rapporto, percentuale_norm, regione, i, annoSelezionato, color:codiceColore};
-
-        }
-        Italy.update("#italiasvg", sampleData);
-        Italy.updateToolTip("#italiasvg", sampleData, tooltipHtml)
-    }
-
-    /* Aggiorna filtri */
-    function updateFiltroTipologia(filtro) {
-        Filtro1 = filtro;
-        updateMap();
-    }
-    function updateFiltroStrada(filtro) {
-        Filtro2 = filtro;
-        updateMap();
-    }
-    function updateFiltroGravita(filtro) {
-        Filtro3 = filtro;
-        updateMap();
-    }
-
-    /* Disegna la prima volta la mappa con impostazione di default "tutta la popolazione" */
-    viewMap();
-
-    d3.select(self.frameElement).style("height", "600px");
-
-    function decimals(number) {
-    if(number>1) return number.roundTo(3);
-    else return number.roundTo(4);
-    } 
-
-    /* Arrotonda i numeri a x cifre decimali */
-    function roundTo(posizioneDecimale){
-        var i = this * Math.pow(10, posizioneDecimale);
-        i = Math.round(i);
-        return i / Math.pow(10,posizioneDecimale);
-    }
-    Number.prototype.roundTo = roundTo;
-
-    function resetDefault() {
-        window.location.reload(true);
-    }
-</script>
-<script>
-    
-    
-    function getIncidentiStradePerAnno() {
-        if (indexRegioneCliccata !== -1) {
-            var regioneCliccata = getRegioniByYear(annoSelezionato)[indexRegioneCliccata];
-            return [{Tipology: "Extra", Population: (regioneCliccata.ve1t+regioneCliccata.ve3t+regioneCliccata.ve2t+regioneCliccata.ve4t+regioneCliccata.pet), Color: "#00ff00"},
-                {Tipology: "Urban", Population:  (regioneCliccata.vu1t+regioneCliccata.vu3t+regioneCliccata.vu2t+regioneCliccata.vu4t+regioneCliccata.put), Color: "#ffff00"}
-            ];
-        }  
-        return [{Tipology: "Extra", Population: (totalePerAnnoSelezionato.ve1t+totalePerAnnoSelezionato.ve3t+totalePerAnnoSelezionato.ve2t+totalePerAnnoSelezionato.ve4t+totalePerAnnoSelezionato.pet), Color: "#0f0"},
-            {Tipology: "Urban", Population:  (totalePerAnnoSelezionato.vu1t+totalePerAnnoSelezionato.vu3t+totalePerAnnoSelezionato.vu2t+totalePerAnnoSelezionato.vu4t+totalePerAnnoSelezionato.put), Color: "#ff0"}
-        ];
-    }
-    
-    function getIncidentiMortiFeritiPerAnno() {
-        if (indexRegioneCliccata !== -1) {
-            var regioneCliccata = getRegioniByYear(annoSelezionato)[indexRegioneCliccata];
-            return [{Tipology: "Deads", Population: (regioneCliccata.ve1f+regioneCliccata.ve3f+regioneCliccata.ve2f+regioneCliccata.ve4f+regioneCliccata.pef+regioneCliccata.vu1f+regioneCliccata.vu3f+regioneCliccata.vu2f+regioneCliccata.vu4f+regioneCliccata.puf), Color: "#f00"},
-                { Tipology: "Injureds", Population: (regioneCliccata.ve1m+regioneCliccata.ve3m+regioneCliccata.ve2m+regioneCliccata.ve4m+regioneCliccata.pem+regioneCliccata.vu1m+regioneCliccata.vu3m+regioneCliccata.vu2m+regioneCliccata.vu4m+regioneCliccata.pum), Color: "#00f"}
-            ];
-        } 
-        return [{ Tipology: "Deads", Population: (totalePerAnnoSelezionato.ve1f+totalePerAnnoSelezionato.ve3f+totalePerAnnoSelezionato.ve2f+totalePerAnnoSelezionato.ve4f+totalePerAnnoSelezionato.pef+totalePerAnnoSelezionato.vu1f+totalePerAnnoSelezionato.vu3f+totalePerAnnoSelezionato.vu2f+totalePerAnnoSelezionato.vu4f+totalePerAnnoSelezionato.puf), Color: "#f00"},
-            { Tipology: "Injureds", Population: (totalePerAnnoSelezionato.ve1m+totalePerAnnoSelezionato.ve3m+totalePerAnnoSelezionato.ve2m+totalePerAnnoSelezionato.ve4m+totalePerAnnoSelezionato.pem+totalePerAnnoSelezionato.vu1m+totalePerAnnoSelezionato.vu3m+totalePerAnnoSelezionato.vu2m+totalePerAnnoSelezionato.vu4m+totalePerAnnoSelezionato.pum), Color: "#00f"}
-        ];
-    }
-
-    barData_default = getIncidentiStradePerAnno();
-
-    barData2_default = getIncidentiMortiFeritiPerAnno();
-
-    /* Preparazione dell'area adibita ai BarCharts */
-    var svg = d3.select("svg"),
-        margin = {
-            top: 50,
-            right: 50,
-            bottom: 30,
-            left: 80
-        },
-        width = 610,
-        height = 230,
-        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    var x = d3.scaleBand()
-        .rangeRound([0, width*0.2])
-        .padding(0.3);
-
-    var y = d3.scaleLinear()
-        .rangeRound([height, 0]);
-
-    var svg2 = d3.select("svg"),
-        margin2 = {
-            top: 50,
-            right: 50,
-            bottom: 30,
-            left: 80
-        },
-        width2 = width,
-        height2 = 230,
-        g2= svg2.append("g").attr("transform", "translate(" + (height2+70) + "," + margin2.top + ")");
-
-    var x2 = d3.scaleBand()
-        .rangeRound([0, width2*0.2])
-        .padding(0.3);
-
-    var y2 = d3.scaleLinear()
-        .rangeRound([height2, 0]);
+                y2.domain([0, maxBar2]);
 
 
-    /* Disegna la prima volta il Bar Chart con i dati dell'Italia e  l'anno di default */
-    function showBar(data, data2, nomeRegione) {
-        {
-            x.domain(data.map(function (d) {
-            return d.Tipology;
-            }));
+                /* Aggiornamento barre del grafico 2 */
+                svg2.selectAll(".bar2")
+                    .remove()
+                    .exit()
+                    .data(data2)
+                    .enter().append("rect")
+                    .attr("class", "bar2")
+                    .style("stroke", "black")
+                    .style("stroke-width", 2)
+                    .style("fill", function (d2) { return d2.Color; })
+                    .style("fill-opacity", 0.6)
+                    .attr("x", function (d2) {
+                        return (x2(d2.Tipology) + 80 + height);
+                    })
+                    .attr("y", function (d2) {
+                        return (y2(Number(d2.Population)) + 50);
+                    })
+                    .attr("width", x2.bandwidth())
+                    .attr("height", function (d2) {
+                        return height2 - y2(Number(d2.Population));
+                    });
 
-            x2.domain(data2.map(function (d) {
-                return d.Tipology;
-            }));
-            
-            var maxBar1, maxBar2;
+                /* Aggiornamento barre del grafico 1*/
+                svg.selectAll(".bar")
+                    .remove()
+                    .exit()
+                    .data(data)
+                    .enter().append("rect")
+                    .attr("class", "bar")
+                    .style("stroke", "black")
+                    .style("stroke-width", 2)
+                    .style("fill", function (d) { return d.Color; })
+                    .style("fill-opacity", 0.6)
+                    .attr("x", function (d) {
+                        return (x(d.Tipology) + 80);
+                    })
+                    .attr("y", function (d) {
+                        return (y(Number(d.Population)) + 50);
+                    })
+                    .attr("width", x.bandwidth())
+                    .attr("height", function (d) {
+                        return height - y(Number(d.Population));
+                    });
 
-            /* Per l'asse y prendo il valore massimo tra i tipi di dato */
-            if (data[0].Population>data[1].Population) {
-                maxBar1 = data[0].Population;}
-            else {
-                maxBar1 = data[1].Population;}
+                /* Aggiornamento Asse Y */
+                svg.select(".asseY")
+                    .call(d3.axisLeft(y));
+                svg2.select(".asseY2")
+                    .call(d3.axisLeft(y2));
 
-            if (data2[0].Population>data2[1].Population) {
-                maxBar2 = data2[0].Population;}
-            else {
-                maxBar2 = data2[1].Population;}
-
-            y.domain([0, maxBar1]);
-
-            y2.domain([0, maxBar2]);
-
-            /*Grafico 1 Strade urbane ed extra urbane*/
-
-            /* X grafico 1 */
-            g.append("g")
-                .attr("class", "asseX")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x));
-
-            /* Y grafico 1 */
-            g.append("g")
-                .attr("class", "asseY")
-                .call(d3.axisLeft(y))
-                .append("text")
-                .attr("fill", "#000")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -30)
-                .attr("font-size", "1.5em")
-                .attr("dy", -30)
-                .attr("text-anchor", "end")
-                .text("Urban and extraurban roads");
-
-            /* Titolo */
-            g.append("g")
-                .append("text")
-                .attr("class", "title")
-                .attr("font-size", "1.5em")
-                .attr("y", -20)
-                .attr("x", (width/2)-300)
-                .text("- " + nomeRegione + " -");
-
-            /* Realizzazione delle bar grafico 1*/
-            g.selectAll(".bar")
-                .data(data)
-                .enter().append("rect")
-                .attr("class", "bar")
-                .style("stroke", "black")
-                .style("stroke-width", 2)
-                .style("fill", function(d){ return d.Color;})
-                .style("fill-opacity", 0.6)
-                .attr("x", function (d) {
-                    return x(d.Tipology);
-                })
-                .attr("y", function (d) {
-                    return y(Number(d.Population));
-                })
-                .attr("width", x.bandwidth())
-                .attr("height", function (d) {
-                    return height - y(Number(d.Population));
-                });
-
-            /*Grafico 2 incidenti e feriti*/
-
-            /* X grafico 2 */
-            g2.append("g")
-                .attr("class", "asseX")
-                .attr("transform", "translate(0," + height2 + ")")
-                .call(d3.axisBottom(x2));
-
-            /* Y grafico 2 */
-            g2.append("g")
-                .attr("class", "asseY2")
-                .call(d3.axisLeft(y2))
-                .append("text")
-                .attr("fill", "#000")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -30)
-                .attr("font-size", "1.5em")
-                .attr("dy", -30)
-                .attr("text-anchor", "end")
-                .text("Injureds and deads");
-
-            /* Realizzazione delle bar grafico 2 */
-            g2.selectAll(".bar2")
-                .data(data2)
-                .enter().append("rect")
-                .attr("class", "bar2")
-                .style("stroke", "black")
-                .style("stroke-width", 2)
-                .style("fill", function(d){ return d.Color;})
-                .style("fill-opacity", 0.6)
-                .attr("x", function (d) {
-                    return x2(d.Tipology);
-                })
-                .attr("y", function (d) {
-                    return y2(Number(d.Population));
-                })
-                .attr("width", x2.bandwidth())
-                .attr("height", function (d) {
-                    return height2 - y2(Number(d.Population));
-                });
+                svg.selectAll(".title")
+                    .attr("x", (width / 2) - 300)
+                    .text("- " + NomeRegione + " -");
+            }
+        </script>
 
 
-        }
-    }
-
-    /* Di default si visualizza il totale di incidenti e vittime per l'anno selezionato */
-    showBar(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", year " + annoSelezionato);
-    /* Aggiornamento dati Bar Chart */
-    function updateBarChart(data, data2, NomeRegione) {
-        x.domain(data.map(function (d) {
-            return d.Tipology;
-        }));
-
-        x2.domain(data2.map(function (d) {
-            return d.Tipology;
-        }));
-        
-        var maxBar1, maxBar2;
-
-        /* Per l'asse y prendo il valore massimo tra i tipi di dato */
-        if (data[0].Population>data[1].Population) {
-            maxBar1 = data[0].Population;}
-        else {
-            maxBar1 = data[1].Population;}
-
-        if (data2[0].Population>data2[1].Population) {
-            maxBar2 = data2[0].Population;}
-        else {
-            maxBar2 = data2[1].Population;}
-
-        y.domain([0, maxBar1]);
-
-        y2.domain([0, maxBar2]);
-
-
-        /* Aggiornamento barre del grafico 2 */
-        svg2.selectAll(".bar2")
-            .remove()
-            .exit()
-            .data(data2)
-            .enter().append("rect")
-            .attr("class", "bar2")
-            .style("stroke", "black")
-            .style("stroke-width", 2)
-            .style("fill", function(d2){ return d2.Color;})
-            .style("fill-opacity", 0.6)
-            .attr("x", function (d2) {
-                return (x2(d2.Tipology)+80+height);
-            })
-            .attr("y", function (d2) {
-                return (y2(Number(d2.Population))+50);
-            })
-            .attr("width", x2.bandwidth())
-            .attr("height", function (d2) {
-                return height2 - y2(Number(d2.Population));
-            });
-
-        /* Aggiornamento barre del grafico 1*/
-        svg.selectAll(".bar")
-            .remove()
-            .exit()
-            .data(data)
-            .enter().append("rect")
-            .attr("class", "bar")
-            .style("stroke", "black")
-            .style("stroke-width", 2)
-            .style("fill", function(d){ return d.Color;})
-            .style("fill-opacity", 0.6)
-            .attr("x", function (d) {
-                return (x(d.Tipology)+80);
-            })
-            .attr("y", function (d) {
-                return (y(Number(d.Population)) + 50);
-            })
-            .attr("width", x.bandwidth())
-            .attr("height", function (d) {
-                return height - y(Number(d.Population));
-            });
-
-        /* Aggiornamento Asse Y */
-       svg.select(".asseY")
-        .call(d3.axisLeft(y));
-        svg2.select(".asseY2")
-        .call(d3.axisLeft(y2));
-
-        svg.selectAll(".title")
-            .attr("x", (width/2)-300)
-            .text("- " + NomeRegione + " -");
-    }
-</script>
 
 </body>
