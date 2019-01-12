@@ -20,7 +20,7 @@
     <div id="tooltip" style="z-index: 1000;"></div>
     <!-- Grafico: bar plot -->
     <svg width="450" height="400" style="position: absolute; top: 100px; left: 900px; z-index: 2;"></svg>
-    <img src="plots\pca.png" style="position: absolute; top: 100px; left: 1500px; z-index: 2;">
+    <img src="plots\pca2013.png" style="position: absolute; top: 100px; left: 1500px; z-index: 2;">
     <img src="plots\pcalegend.png" style="position: absolute; top: 100px; left: 2150px; z-index: 2;">
     <!-- Fine Grafico -->
     <!-- Mappa -->
@@ -141,6 +141,7 @@
                 output.innerHTML = this.value;
                 annoSelezionato = this.value;
                 updateMap();
+                updatePCA();
                 updateBarChart(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", year " + annoSelezionato)
             };
             var annoSelezionato = slider.value;
@@ -544,7 +545,12 @@
                 svg.selectAll(".title")
                     .attr("x", (width / 2) - 300)
                     .text("- " + NomeRegione + " -");
-            }
+        }
+
+        function updatePCA() {
+            var immaginecorrente = "plots\pca" + annoSelezionato + ".png";
+        }
+
     </script>
 
 
