@@ -45,7 +45,7 @@ for target, color in zip(targets,colors):
                , finalDf.loc[indicesToKeep, 'principal component 2']
                , c = color
                , s = 50)
-ax.legend(targets)
+#ax.legend(targets)
 ax.grid()
 
 plt.savefig("plots/pca.png")
