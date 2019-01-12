@@ -16,104 +16,105 @@
 
 <body>
 
-        <div id="header"> </div>
-        <div id="tooltip" style="z-index: 1000;"></div>
-        <!-- Grafico: bar plot -->
-        <svg width="450" height="400" style="position: absolute; top: 100px; left: 900px; z-index: 2;"></svg>
-        <!-- Fine Grafico -->
-        <!-- Mappa -->
-        <svg width="700" height="750" id="italiasvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
-        <!-- Fine Mappa -->
-        <div style="position: absolute; top: 150px; left: 650px; z-index: 100;"><button class="reset" onclick="resetDefault()">Reset</button></div>
-        <!-- Inizio scala colore laterale -->
-        <div class="container" style="top: 150px; left: 50px; z-index: 1;">
-            <h4>High <br> rate <br>of accidents</h4>
-            <div class="tooltip">
-                <img src="imm/green.png" alt="scala colori utilizzata" id="imgScale" border=2 height="450 px" width="50px">
-                <span class="tooltiptext">Color scale with shades based on the number of accidents filtered.</span>
-            </div>
-            <h4>Low <br> rate <br>of accidents</h4>
+    <div id="header"> </div>
+    <div id="tooltip" style="z-index: 1000;"></div>
+    <!-- Grafico: bar plot -->
+    <svg width="450" height="400" style="position: absolute; top: 100px; left: 900px; z-index: 2;"></svg>
+    <img src="plots\pca.png" style="position: absolute; top: 100px; left: 1500px; z-index: 2;">
+    <!-- Fine Grafico -->
+    <!-- Mappa -->
+    <svg width="700" height="750" id="italiasvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
+    <!-- Fine Mappa -->
+    <div style="position: absolute; top: 150px; left: 650px; z-index: 100;"><button class="reset" onclick="resetDefault()">Reset</button></div>
+    <!-- Inizio scala colore laterale -->
+    <div class="container" style="top: 150px; left: 50px; z-index: 1;">
+        <h4>High <br> rate <br>of accidents</h4>
+        <div class="tooltip">
+            <img src="imm/green.png" alt="scala colori utilizzata" id="imgScale" border=2 height="450 px" width="50px">
+            <span class="tooltiptext">Color scale with shades based on the number of accidents filtered.</span>
         </div>
-        <!-- Fine scala colore laterale -->
-        <!-- Slider temporale -->
-        <div id="slider" style="position:absolute;top:750px;left:860px;width: 600px; z-index: 2000">
-            <div align="center">
-                <input type="range" min="2003" max="2013" value="2013" class="slider" id="range" style="z-index: -1000;">
-                <p>Year: <span id="valoreAnno"></span></p>
-            </div>
+        <h4>Low <br> rate <br>of accidents</h4>
+    </div>
+    <!-- Fine scala colore laterale -->
+    <!-- Slider temporale -->
+    <div id="slider" style="position:absolute;top:750px;left:860px;width: 600px; z-index: 2000">
+        <div align="center">
+            <input type="range" min="2003" max="2013" value="2013" class="slider" id="range" style="z-index: -1000;">
+            <p>Year: <span id="valoreAnno"></span></p>
         </div>
-        <!-- Fine Slider temporale -->
-        <!-- Inizio sezione bottoni/filtri -->
-        <div class="container" style="top: 440px; left: 1070px; width: 170px;">
-            <h2>Severity</h2>
-            <ul>
-                <li>
-                    <input type="radio" id="at-option" name="selector-severity" checked="checked" onclick="updateFiltroGravita('all')">
-                    <label for="at-option">All</label>
-                    <div class="check"></div>
-                </li>
-                <li>
-                    <input type="radio" id="f-option" name="selector-severity" onclick="updateFiltroGravita('injured')">
-                    <label for="f-option">Only injureds</label>
-                    <div class="check"><div class="inside"></div></div>
-                </li>
-                <li>
-                    <input type="radio" id="m-option" name="selector-severity" onclick="updateFiltroGravita('dead')">
-                    <label for="m-option">At least a dead</label>
-                    <div class="check"><div class="inside"></div></div>
-                </li>
-            </ul>
-        </div>
-        <div class="container" style="top: 440px; left: 850px; width: 150px;">
-            <h2>Actors</h2>
-            <ul>
-                <li>
-                    <input type="radio" id="a-option" name="selector-type" checked="checked" onclick="updateFiltroTipologia('all')">
-                    <label for="a-option">All</label>
-                    <div class="check"></div>
-                </li>
-                <li>
-                    <input type="radio" id="v-option" name="selector-type" onclick="updateFiltroTipologia('cars')">
-                    <label for="v-option">Only vehicles</label>
-                    <div class="check"></div>
-                </li>
-                <li>
-                    <input type="radio" id="p-option" name="selector-type" onclick="updateFiltroTipologia('pedestrians')">
-                    <label for="p-option">At least a pedestrian</label>
-                    <div class="check"><div class="inside"></div></div>
-                </li>
-            </ul>
-        </div>
-        <div class="container" style="top: 440px; left: 1290px; width: 150px;">
-            <h2>Road</h2>
-            <ul>
-                <li>
-                    <input type="radio" id="t-option" name="selector-street" checked="checked" onclick="updateFiltroStrada('all')">
-                    <label for="t-option">All</label>
-                    <div class="check"></div>
-                </li>
-                <li>
-                    <input type="radio" id="u-option" name="selector-street" onclick="updateFiltroStrada('urban')">
-                    <label for="u-option">Urban</label>
-                    <div class="check"></div>
-                </li>
-                <li>
-                    <input type="radio" id="e-option" name="selector-street" onclick="updateFiltroStrada('interurban')">
-                    <label for="e-option">Extraurban</label>
-                    <div class="check"><div class="inside"></div></div>
-                </li>
-            </ul>
-        </div>
-        <!-- Fine sezione bottoni/filtri -->
-        <!-- Inizio sezione Cerchio con colore della regione -->
-        <div class="tooltip" style="top: 120px; left: 600px; visibility: hidden;">
-            <svg width="80" height="80">
-                <circle cx="40" cy="40" r="38" fill="none" z-index="5" />
-            </svg>
-        </div>
+    </div>
+    <!-- Fine Slider temporale -->
+    <!-- Inizio sezione bottoni/filtri -->
+    <div class="container" style="top: 440px; left: 1070px; width: 170px;">
+        <h2>Severity</h2>
+        <ul>
+            <li>
+                <input type="radio" id="at-option" name="selector-severity" checked="checked" onclick="updateFiltroGravita('all')">
+                <label for="at-option">All</label>
+                <div class="check"></div>
+            </li>
+            <li>
+                <input type="radio" id="f-option" name="selector-severity" onclick="updateFiltroGravita('injured')">
+                <label for="f-option">Only injureds</label>
+                <div class="check"><div class="inside"></div></div>
+            </li>
+            <li>
+                <input type="radio" id="m-option" name="selector-severity" onclick="updateFiltroGravita('dead')">
+                <label for="m-option">At least a dead</label>
+                <div class="check"><div class="inside"></div></div>
+            </li>
+        </ul>
+    </div>
+    <div class="container" style="top: 440px; left: 850px; width: 150px;">
+        <h2>Actors</h2>
+        <ul>
+            <li>
+                <input type="radio" id="a-option" name="selector-type" checked="checked" onclick="updateFiltroTipologia('all')">
+                <label for="a-option">All</label>
+                <div class="check"></div>
+            </li>
+            <li>
+                <input type="radio" id="v-option" name="selector-type" onclick="updateFiltroTipologia('cars')">
+                <label for="v-option">Only vehicles</label>
+                <div class="check"></div>
+            </li>
+            <li>
+                <input type="radio" id="p-option" name="selector-type" onclick="updateFiltroTipologia('pedestrians')">
+                <label for="p-option">At least a pedestrian</label>
+                <div class="check"><div class="inside"></div></div>
+            </li>
+        </ul>
+    </div>
+    <div class="container" style="top: 440px; left: 1290px; width: 150px;">
+        <h2>Road</h2>
+        <ul>
+            <li>
+                <input type="radio" id="t-option" name="selector-street" checked="checked" onclick="updateFiltroStrada('all')">
+                <label for="t-option">All</label>
+                <div class="check"></div>
+            </li>
+            <li>
+                <input type="radio" id="u-option" name="selector-street" onclick="updateFiltroStrada('urban')">
+                <label for="u-option">Urban</label>
+                <div class="check"></div>
+            </li>
+            <li>
+                <input type="radio" id="e-option" name="selector-street" onclick="updateFiltroStrada('interurban')">
+                <label for="e-option">Extraurban</label>
+                <div class="check"><div class="inside"></div></div>
+            </li>
+        </ul>
+    </div>
+    <!-- Fine sezione bottoni/filtri -->
+    <!-- Inizio sezione Cerchio con colore della regione -->
+    <div class="tooltip" style="top: 120px; left: 600px; visibility: hidden;">
+        <svg width="80" height="80">
+            <circle cx="40" cy="40" r="38" fill="none" z-index="5" />
+        </svg>
+    </div>
 
 
-        <script>
+    <script>
             /* Intestazione in alto */
             const header = d3.select('#header');
             const instructions = header.append('div').attr('id', 'instructions').append('div');
@@ -258,8 +259,8 @@
             function resetDefault() {
                 window.location.reload(true);
             }
-        </script>
-        <script>
+    </script>
+    <script>
 
 
             function getIncidentiStradePerAnno() {
@@ -543,7 +544,7 @@
                     .attr("x", (width / 2) - 300)
                     .text("- " + NomeRegione + " -");
             }
-        </script>
+    </script>
 
 
 

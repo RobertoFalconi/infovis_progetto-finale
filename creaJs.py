@@ -1,19 +1,60 @@
 import csv
 import pandas as pd
+import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from matplotlib import pyplot as plt
+from matplotlib.mlab import PCA as mlabPCA
+from sklearn import preprocessing
 
 Input="dataset/dataset.csv"
 OUTPUT="datasetRegioni.js"
 f = open(Input, 'r')
 reader = csv.reader(f)
 
+
 df = pd.read_csv('dataset/dataset.csv', encoding="utf-8")
+target = df.Regioni
+print(target)
 df = df.drop('Regioni', axis=1).reset_index(drop=True)
 X = df.values
 scaler = StandardScaler().fit_transform(X)
 pca = PCA(n_components=2)
 principalComponents = pca.fit_transform(scaler)
+principalDf = pd.DataFrame(data = principalComponents
+             , columns = ['principal component 1', 'principal component 2'])
+print(principalDf)
+
+finalDf = pd.concat([principalDf, target], axis = 1)
+print(finalDf)
+
+fig = plt.figure()
+ax = fig.add_subplot(1,1,1) 
+ax.set_xlabel('Principal Component 1', fontsize = 15)
+ax.set_ylabel('Principal Component 2', fontsize = 15)
+ax.set_title('2-component PCA', fontsize = 20)
+ax.set_facecolor('xkcd:light grey')
+targets = target
+colors = ['r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+'#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+'#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+'#7c0000']
+for target, color in zip(targets,colors):
+    indicesToKeep = finalDf['Regioni'] == target
+    ax.scatter(finalDf.loc[indicesToKeep, 'principal component 1']
+               , finalDf.loc[indicesToKeep, 'principal component 2']
+               , c = color
+               , s = 50)
+ax.legend(targets)
+ax.grid()
+
+plt.savefig("plots/pca.png")
+plt.show()
+plt.close(fig)
+
+#print(pca.explained_variance_ratio_)
+
+
 
 lista = []
 for row in reader:
