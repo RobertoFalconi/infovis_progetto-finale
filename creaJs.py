@@ -1,61 +1,260 @@
 import csv
+from time import time
 import pandas as pd
 import numpy as np
+import seaborn as sns
+from ggplot import *
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from matplotlib import pyplot as plt
 from matplotlib.mlab import PCA as mlabPCA
+import matplotlib.patheffects as PathEffects
+from matplotlib.pyplot import scatter
 from sklearn import preprocessing
+from sklearn import manifold
+from sklearn.manifold import MDS
+from sklearn.manifold import TSNE
+from sklearn.metrics import euclidean_distances
+from matplotlib.collections import LineCollection
 
 Input="dataset/dataset.csv"
 OUTPUT="datasetRegioni.js"
 f = open(Input, 'r')
 reader = csv.reader(f)
 
-
 df = pd.read_csv('dataset/dataset.csv', encoding="utf-8")
 target = df.Regioni
-print(target)
+#print(target)
 df = df.drop('Regioni', axis=1).reset_index(drop=True)
 X = df.values
+
+# PCA
+
 scaler = StandardScaler().fit_transform(X)
 pca = PCA(n_components=2)
 principalComponents = pca.fit_transform(scaler)
 principalDf = pd.DataFrame(data = principalComponents
              , columns = ['principal component 1', 'principal component 2'])
-print(principalDf)
+#print(principalDf)
 
 finalDf = pd.concat([principalDf, target], axis = 1)
-print(finalDf)
+#print(finalDf)
 
-fig = plt.figure()
-ax = fig.add_subplot(1,1,1) 
-ax.set_xlabel('Principal Component 1', fontsize = 15)
-ax.set_ylabel('Principal Component 2', fontsize = 15)
-ax.set_title('2-component PCA', fontsize = 20)
-ax.set_facecolor('xkcd:light grey')
+#print(target)
+i = 0
+for elem in target:
+    if "Totale" in elem:
+        target = target.drop(i)
+    i = i + 1
+#print(target)
+i = 0
 targets = target
-colors = ['r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
-'#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
-'#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
-'#7c0000']
-for target, color in zip(targets,colors):
-    indicesToKeep = finalDf['Regioni'] == target
-    ax.scatter(finalDf.loc[indicesToKeep, 'principal component 1']
-               , finalDf.loc[indicesToKeep, 'principal component 2']
-               , c = color
-               , s = 50)
-#ax.legend(targets)
-ax.grid()
+for round in range(13):
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1) 
+    ax.set_xlabel('Principal Component 1', fontsize = 15)
+    ax.set_ylabel('Principal Component 2', fontsize = 15)
+    if (i < 9):
+        title = "2-component PCA 200" + str(i+1)
+    else:
+        title = "2-component PCA 20" + str(i+1)
+    ax.set_title(title, fontsize = 20)
+    ax.set_facecolor('xkcd:light grey')
+    colors = []
+    if round == 0:
+        colors = [
+            'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 1:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 2:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 3:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 4:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 5:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 6:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 7:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 8:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 9:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 10:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 11:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 12:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    elif round == 13:
+        colors = [
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+            'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey', 'xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey','xkcd:light grey',
+        'r', 'g', 'b', '#d104b5', '#fffa00', '#a8ff7c', '#00ff00',
+        '#00ffa1', '#ff96ca', '#cca72e', '#ff8800', '#5977ff', '#563700',
+        '#898500', '#ddff96', '#96ffe3', '#96f9ff', '#b599ff', '#8b5b8e',
+        '#7c0000']
+    else:
+        break
+    
+    for target, color in zip(targets,colors):
+        indicesToKeep = finalDf['Regioni'] == target
+        ax.scatter(finalDf.loc[indicesToKeep, 'principal component 1']
+                    , finalDf.loc[indicesToKeep, 'principal component 2']
+                    , c = color               
+                    , s = 50)
+    ax.legend(targets)
+    #ax.grid()
 
-plt.savefig("plots/pca.png")
-plt.show()
-plt.close(fig)
+    plt.savefig("plots/pca200"+str(i+1)+".png")
+    plt.show()
+    plt.close(fig)
+    i = i +1
+    #print(pca.explained_variance_ratio_)
 
-#print(pca.explained_variance_ratio_)
-
-
-
+# D3
 lista = []
 for row in reader:
     lista.append(row)
@@ -97,3 +296,4 @@ for i in lista:
         f2.write("\n\n")
         cont=0
         app=[]
+
