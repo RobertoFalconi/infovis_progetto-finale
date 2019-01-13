@@ -16,6 +16,12 @@ from sklearn.manifold import MDS
 from sklearn.manifold import TSNE
 from sklearn.metrics import euclidean_distances
 from matplotlib.collections import LineCollection
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MaxAbsScaler
+from sklearn.preprocessing import RobustScaler
+from sklearn.preprocessing import Normalizer
+from sklearn.preprocessing import QuantileTransformer
+from sklearn.preprocessing import PowerTransformer
 
 Input="dataset/dataset.csv"
 OUTPUT="datasetRegioni.js"
@@ -30,9 +36,26 @@ X = df.values
 
 # PCA
 
-scaler = StandardScaler().fit_transform(X)
+standardscaler = StandardScaler().fit_transform(X)              # distanzia sulla destra lombardia, lazio e 
+minmaxscaler = MinMaxScaler().fit_transform(X)                  # come standardscaler
+normalizer = Normalizer().fit_transform(X)                      # raccoglie molise, valle d'aosta e basilicata sulla destra
+quantiletransformer = QuantileTransformer().fit_transform(X)    # distribuisce in modo omogeneo dalla meno accidentata (sx) alla più accidentata (dx)
+powertransformer = PowerTransformer().fit_transform(X)          # come quantile
 pca = PCA(n_components=2)
+scaler = powertransformer
 principalComponents = pca.fit_transform(scaler)
+if (scaler is standardscaler):
+    scaler = "StandardScaler"
+elif (scaler is minmaxscaler):
+    scaler = "MinMaxScaler"
+elif (scaler is normalizer):
+    scaler = "Normalizer"
+elif (scaler is quantiletransformer):
+    scaler = "QuantileTransformer"
+elif (scaler is powertransformer):
+    scaler = "PowerTransformer"
+else:
+    scaler = "OriginalData"
 principalDf = pd.DataFrame(data = principalComponents
              , columns = ['principal component 1', 'principal component 2'])
 #print(principalDf)
@@ -55,9 +78,9 @@ for round in range(13):
     ax.set_xlabel('Principal Component 1', fontsize = 15)
     ax.set_ylabel('Principal Component 2', fontsize = 15)
     if (i < 9):
-        title = "2-component PCA 200" + str(i+1)
+        title = "2-component PCA 200" + str(i+1) + " " + str(scaler)
     else:
-        title = "2-component PCA 20" + str(i+1)
+        title = "2-component PCA 20" + str(i+1) + " " + str(scaler)
     ax.set_title(title, fontsize = 20)
     ax.set_facecolor('xkcd:light grey')
     colors = []
@@ -245,13 +268,13 @@ for round in range(13):
                     , finalDf.loc[indicesToKeep, 'principal component 2']
                     , c = color               
                     , s = 50)
-    #ax.legend(targets)
+    ax.legend(targets)
     #ax.grid()
     if (i < 9):
-        plt.savefig("plots/pca200"+str(i+1)+".png")
+        plt.savefig("plots/pca200"+str(i+1)+str(scaler)+".png")
     else:
-        plt.savefig("plots/pca20"+str(i+1)+".png")
-    plt.show()
+        plt.savefig("plots/pca20"+str(i+1)+str(scaler)+".png")
+    #plt.show()
     
     plt.close(fig)
 
