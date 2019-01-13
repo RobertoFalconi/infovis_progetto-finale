@@ -138,20 +138,18 @@
         /* Slider */
         var slider = document.getElementById("range");
         var output = document.getElementById("valoreAnno");
+        var image = document.getElementById("grafico");
         output.innerHTML = slider.value;
+
         slider.oninput = function () {
             output.innerHTML = this.value;
             annoSelezionato = this.value;
+            image.src = "plots\\pca" + this.value + ".png";
             updateMap();
             updatePCA();
             updateBarChart(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", year " + annoSelezionato)
         };
         var annoSelezionato = slider.value;
-
-        slider.onchange = function () {
-            var image = document.getElementById("grafico");
-            image.src = "plots\\pca" + slider.value + ".png";
-        }
 
         /* Tooltip */
         function tooltipHtml(n, d) {

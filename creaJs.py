@@ -251,7 +251,7 @@ for round in range(13):
         plt.savefig("plots/pca200"+str(i+1)+".png")
     else:
         plt.savefig("plots/pca20"+str(i+1)+".png")
-    #plt.show()
+    plt.show()
     
     plt.close(fig)
 
