@@ -22,8 +22,14 @@
     <svg width="450" height="400" style="position: absolute; top: 100px; left: 900px; z-index: 2;"></svg>
     <!-- Fine Grafico -->
     <!-- Inizio PCA -->
-    <img id="grafico" src="plots\pca2013.png" style="position: absolute; top: 100px; left: 1500px; z-index: 2;">
+    <img id="grafico" src="plots\pca2013MinMaxScaler.png" style="position: absolute; top: 100px; left: 1500px; z-index: 2;">
     <img src="plots\pcalegend.png" style="position: absolute; top: 100px; left: 2150px; z-index: 2;">
+    <div id="typeSlider" style="position:absolute;top:600px;left:1570px;width: 500px; z-index: 2000">
+        <div align="center">
+            <input type="range" min="1" max="6" value="1" class="slider" id="typeRange" style="z-index: -1000;">
+            <p><span id="valoreTipo"></span></p>
+        </div>
+    </div>
     <!-- Fine PCA -->
     <!-- Mappa -->
     <svg width="700" height="750" id="italiasvg" style="position: absolute; top: 90px; left: 200px; z-index: 2;"></svg>
@@ -141,15 +147,54 @@
         var image = document.getElementById("grafico");
         output.innerHTML = slider.value;
 
+        var typeSlider = document.getElementById("typeRange");
+        var typeOutput = document.getElementById("valoreTipo");
+        var type = getType();
+        typeOutput.innerHTML = type;
+
         slider.oninput = function () {
             output.innerHTML = this.value;
             annoSelezionato = this.value;
-            image.src = "plots\\pca" + this.value + ".png";
+            image.src = "plots\\pca" + this.value + type + ".png";
             updateMap();
             updatePCA();
             updateBarChart(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", year " + annoSelezionato)
         };
         var annoSelezionato = slider.value;
+
+        function getType(){
+            var typeId = typeSlider.value;
+            switch(typeId){
+                case "1":
+                    return "MinMaxScaler";
+                    break;
+                case "2":
+                    return "Normalizer";
+                    break;
+                case "3":
+                    return "OriginalData";
+                    break;
+                case "4":
+                    return "PowerTransformer";
+                    break;
+                case "5":
+                    return "QuantileTransformer";
+                    break;
+                case "6":
+                    return "StandardScaler";
+                    break;
+            }
+        }
+
+        typeSlider.oninput = function () {
+            type = getType();
+            typeOutput.innerHTML = type;
+            annoSelezionato = slider.value;
+            image.src = "plots\\pca" + slider.value + type + ".png";
+            updateMap();
+            updatePCA();
+            updateBarChart(getIncidentiStradePerAnno(), getIncidentiMortiFeritiPerAnno(), getIntestazioneBarChart() + ", year " + annoSelezionato)
+        };
 
         /* Tooltip */
         function tooltipHtml(n, d) {

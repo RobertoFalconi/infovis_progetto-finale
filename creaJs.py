@@ -268,7 +268,7 @@ for round in range(13):
                     , finalDf.loc[indicesToKeep, 'principal component 2']
                     , c = color               
                     , s = 50)
-    ax.legend(targets)
+    #ax.legend(targets)
     #ax.grid()
     if (i < 9):
         plt.savefig("plots/pca200"+str(i+1)+str(scaler)+".png")
