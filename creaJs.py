@@ -42,7 +42,7 @@ normalizer = Normalizer().fit_transform(X)                      # raccoglie moli
 quantiletransformer = QuantileTransformer().fit_transform(X)    # distribuisce in modo omogeneo dalla meno accidentata (sx) alla più accidentata (dx)
 powertransformer = PowerTransformer().fit_transform(X)          # come quantile
 pca = PCA(n_components=2)
-scaler = powertransformer
+scaler = minmaxscaler
 principalComponents = pca.fit_transform(scaler)
 if (scaler is standardscaler):
     scaler = "StandardScaler"
@@ -65,6 +65,7 @@ finalDf = pd.concat([principalDf, target], axis = 1)
 
 #print(target)
 i = 0
+target2 = target
 for elem in target:
     if ("Italia" in elem or "Totale" in elem):
         target = target.drop(i)
@@ -281,6 +282,127 @@ for round in range(13):
     i = i +1
     #print(pca.explained_variance_ratio_)
 
+'''
+# PCA
+df = pd.read_csv('dataset/dataset.csv', encoding="utf-8")
+target = df.Regioni
+#print(target)
+df = df.drop('Regioni', axis=1).reset_index(drop=True)
+X = df.values
+
+standardscaler = StandardScaler().fit_transform(X)              # distanzia sulla destra lombardia, lazio e 
+minmaxscaler = MinMaxScaler().fit_transform(X)                  # come standardscaler
+normalizer = Normalizer().fit_transform(X)                      # raccoglie molise, valle d'aosta e basilicata sulla destra
+quantiletransformer = QuantileTransformer().fit_transform(X)    # distribuisce in modo omogeneo dalla meno accidentata (sx) alla più accidentata (dx)
+powertransformer = PowerTransformer().fit_transform(X)          # come quantile
+pca = PCA(n_components=2)
+scaler = standardscaler
+principalComponents = pca.fit_transform(scaler)
+if (scaler is standardscaler):
+    scaler = "StandardScaler"
+elif (scaler is minmaxscaler):
+    scaler = "MinMaxScaler"
+elif (scaler is normalizer):
+    scaler = "Normalizer"
+elif (scaler is quantiletransformer):
+    scaler = "QuantileTransformer"
+elif (scaler is powertransformer):
+    scaler = "PowerTransformer"
+else:
+    scaler = "OriginalData"
+principalDf = pd.DataFrame(data = principalComponents
+             , columns = ['principal component 1', 'principal component 2'])
+#print(principalDf)
+
+finalDf = pd.concat([principalDf, target], axis = 1)
+#print(finalDf)
+
+#print(target)
+i = 0
+target = target2
+for elem in target:
+    if ("Lazio" not in elem):
+        target = target.drop(i)
+    i = i + 1
+#print(target)
+i = 0
+targets = target
+for round in range(13):
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1) 
+    ax.set_xlabel('Principal Component 1', fontsize = 15)
+    ax.set_ylabel('Principal Component 2', fontsize = 15)
+    if (i < 9):
+        title = "2-component PCA 200" + str(i+1) + " " + str(scaler) + " Lazio"
+    else:
+        title = "2-component PCA 20" + str(i+1) + " " + str(scaler) + " Lazio"
+    ax.set_title(title, fontsize = 20)
+    ax.set_facecolor('xkcd:light grey')
+    colors = []
+    if round == 0:
+        colors = [
+            '#5977ff']
+    elif round == 1:
+        colors = [
+            '#5977ff']
+    elif round == 2:
+        colors = [
+        '#5977ff']
+    elif round == 3:
+        colors = [
+        '#5977ff']
+    elif round == 4:
+        colors = [
+        '#5977ff']
+    elif round == 5:
+        colors = [
+        '#5977ff']
+    elif round == 6:
+        colors = [
+        '#5977ff']
+    elif round == 7:
+        colors = [
+        '#5977ff']
+    elif round == 8:
+        colors = [
+        '#5977ff']
+    elif round == 9:
+        colors = [
+        '#5977ff']
+    elif round == 10:
+        colors = [
+        '#5977ff']
+    elif round == 11:
+        colors = [
+        '#5977ff']
+    elif round == 12:
+        colors = [
+        '#5977ff']
+    elif round == 13:
+        colors = [
+        '#5977ff']
+    else:
+        break
+    
+    for target, color in zip(targets,colors):
+        indicesToKeep = finalDf['Regioni'] == target
+        ax.scatter(finalDf.loc[indicesToKeep, 'principal component 1']
+                    , finalDf.loc[indicesToKeep, 'principal component 2']
+                    , c = color               
+                    , s = 50)
+    #ax.legend(targets)
+    #ax.grid()
+    if (i < 9):
+        plt.savefig("plots/pca200"+str(i+1)+str(scaler)+"Lazio.png")
+    else:
+        plt.savefig("plots/pca20"+str(i+1)+str(scaler)+"Lazio.png")
+    #plt.show()
+    
+    plt.close(fig)
+
+    i = i +1
+    #print(pca.explained_variance_ratio_)
+'''
 # D3
 lista = []
 for row in reader:
