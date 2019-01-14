@@ -1,4 +1,4 @@
-# infovis_progetto-finale
+# Visual Analytics project: Traffic Collisions in Italy
 Interactive map of Italy and PCA graphs to understand data about traffic collisions and accidents.
 
 # Links
