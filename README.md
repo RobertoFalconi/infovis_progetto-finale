@@ -5,7 +5,7 @@ Interactive map of Italy and PCA graphs to understand data about traffic collisi
 - Paper: https://www.slideshare.net/RobertoFalconi4/visual-analytics-project-traffic-collisions-in-italy-128292099  
   
 # Useful links  
-- Portfolio: http://www.robertodaguarcino.com  
+- Portfolio: https://robertodaguarcino.com  
 - LinkedIn: https://www.linkedin.com/in/roberto-falconi  
 - GitHub: https://github.com/RobertoFalconi  
 - SlideShare: https://www.slideshare.net/RobertoFalconi4  
